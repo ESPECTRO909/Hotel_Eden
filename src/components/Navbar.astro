@@ -30,7 +30,11 @@ const locationAnchor = english ? 'location' : 'ubicacion';
   </details>
   <div class="nav-actions">
     <a class="language-link" href={languageHref} data-language-switch>{english ? 'ES' : 'EN'} <span aria-hidden="true">↗</span></a>
-    <a class="nav-cta" href={`${home}#${roomsAnchor}`}>{english ? 'Check dates' : 'Consultar fechas'} <span aria-hidden="true">↗</span></a>
+    <a class="nav-cta" href={`${home}#${roomsAnchor}`}>
+      <span class="nav-cta-label">{english ? 'Check dates' : 'Consultar fechas'}</span>
+      <span class="nav-cta-compact">{english ? 'Book' : 'Reservar'}</span>
+      <span aria-hidden="true">↗</span>
+    </a>
   </div>
 </nav>
 
