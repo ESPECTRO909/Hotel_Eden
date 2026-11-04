@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import { rooms, type Room } from '../../../data/hotelData';
 import { siteConfig } from '../../../data/siteConfig';
 import type { GetStaticPaths } from 'astro';
+import AmenityList from '../../../react/AmenityList';
 
 interface Props {
   room: Room;
@@ -32,7 +33,7 @@ const schema = {
     <div class="room-page-top"><a class="back-link" href="/en/#rooms">← All rooms</a><span class="eyebrow">{room.eyebrow.en}</span></div>
     <div class="room-page-heading"><div><h1>{room.name.en}</h1><p>{room.description.en}</p></div><div class="room-page-price"><span>FROM</span><strong>${room.price.toLocaleString('en-US')}</strong><small>MXN · per night</small></div></div>
     <div class="room-gallery"><img src={room.images[0].src} data-fallback={room.images[0].fallback} alt={room.images[0].alt.en} /><div>{room.images.slice(1).map((image) => <img src={image.src} data-fallback={image.fallback} alt={image.alt.en} loading="lazy" />)}</div></div>
-    <div class="room-page-info"><div><p class="eyebrow">THE SPACE</p><h2>A place to slow down.</h2><p>{room.description.en}</p><div class="room-facts"><span>{room.size} m²</span><span>{room.beds.en}</span><span>Up to {room.capacity} guests</span></div></div><div><p class="eyebrow">INCLUDED</p><ul>{room.amenities.map((amenity) => <li>{amenity.en}</li>)}</ul><p class="eyebrow policy-heading">POLICIES</p><ul>{room.policies.map((policy) => <li>{policy.en}</li>)}</ul></div></div>
+    <div class="room-page-info"><div><p class="eyebrow">THE SPACE</p><h2>A place to slow down.</h2><p>{room.description.en}</p><div class="room-facts"><span>{room.size} m²</span><span>{room.beds.en}</span><span>Up to {room.capacity} guests</span></div></div><div><p class="eyebrow">INCLUDED</p><AmenityList items={room.amenities.map((amenity) => amenity.en)} /><p class="eyebrow policy-heading">POLICIES</p><ul class="room-policy-list">{room.policies.map((policy) => <li>{policy.en}</li>)}</ul></div></div>
     <div class="room-page-book"><div><strong>From ${room.price.toLocaleString('en-US')} MXN</strong><span>per night · estimate shown in request</span></div><a class="button button-dark" href={homeUrl}>Enquire about this room <span aria-hidden="true">↗</span></a></div>
   </article>
 </Layout>

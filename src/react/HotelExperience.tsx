@@ -8,6 +8,7 @@ import { readBlockedDates } from '../utils/availability';
 import { sendRequestBackup } from '../utils/backup';
 import { trackEvent } from '../utils/track';
 import { buildWhatsAppMessage, buildWhatsAppUrl, type Reservation } from '../utils/whatsapp';
+import AmenityList from './AmenityList';
 
 type Language = 'es' | 'en';
 type Copy = (typeof ui)[Language];
@@ -320,7 +321,7 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
                 <p className="eyebrow">{detailRoom.eyebrow[lang]}</p><h2 id="detail-title">{detailRoom.name[lang]}</h2>
                 <p className="detail-description">{detailRoom.description[lang]}</p>
                 <div className="detail-facts"><span>{detailRoom.size} m²</span><span>{detailRoom.beds[lang]}</span><span>{lang === 'es' ? `Hasta ${detailRoom.capacity} huéspedes` : `Up to ${detailRoom.capacity} guests`}</span></div>
-                <div className="detail-section"><h3>{copy.amenities}</h3><div className="amenity-chips">{detailRoom.amenities.map((item) => <span key={item.es}><Check size={15} />{item[lang]}</span>)}</div></div>
+                <div className="detail-section"><h3>{copy.amenities}</h3><AmenityList className="amenity-chips" items={detailRoom.amenities.map((item) => item[lang])} /></div>
                 <div className="detail-section"><h3>{copy.policies}</h3><ul className="policy-list">{detailRoom.policies.map((item) => <li key={item.es}>{item[lang]}</li>)}</ul></div>
                 <a className="detail-page-link" href={`${lang === 'es' ? '/habitaciones/' : '/en/rooms/'}${detailRoom.slug}/`}><span>{lang === 'es' ? 'Ver página completa' : 'View full room page'}</span><ArrowUpRight size={17} /></a>
               </div>
