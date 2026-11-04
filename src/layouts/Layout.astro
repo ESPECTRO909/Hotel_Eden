@@ -39,6 +39,8 @@ const schema = structuredData ?? {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" sizes="32x32" />
     <script is:inline>
       document.addEventListener('error', (event) => {
         const image = event.target;

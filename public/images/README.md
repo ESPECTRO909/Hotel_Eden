@@ -13,6 +13,13 @@ Usa formato `.webp` o `.jpg`. Si usas `.jpg`, actualiza la extensión `.webp` en
 
 - `amenities/patio.webp`: patio, jardín o piscina, ideal 1400 × 1500 px.
 
+## Galería de áreas
+
+- `areas/fachada.webp`: fachada del hotel. Si falta, la galería usa la foto de portada.
+- `areas/habitaciones.webp`: vista general de las habitaciones.
+- `areas/patio.webp`: patio o jardín.
+- `areas/areas-comunes.webp`: recepción, sala o área común.
+
 ## Habitaciones
 
 Cada carpeta necesita tres imágenes. La primera es la portada de la tarjeta y la galería comienza por ella.

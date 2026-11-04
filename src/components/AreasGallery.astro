@@ -1,0 +1,96 @@
+---
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const labels = lang === 'es'
+  ? {
+      eyebrow: 'CONOCE NUESTROS ESPACIOS',
+      title: 'Cada rincón invita a quedarte.',
+      description: 'Un recorrido por los espacios de Hotel El Eden.',
+      previous: 'Ver áreas anteriores',
+      next: 'Ver más áreas',
+      slides: [
+        { title: 'Fachada', detail: 'Hotel El Eden · La Piedad', src: '/images/areas/fachada.webp', fallback: '/images/hero/La-Piedad-1.jpeg.webp', alt: 'Fachada de Hotel El Eden' },
+        { title: 'Habitaciones', detail: 'Espacios para descansar', src: '/images/areas/habitaciones.webp', fallback: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85', alt: 'Habitación de hotel preparada para huéspedes' },
+        { title: 'Patio y jardín', detail: 'Un respiro al aire libre', src: '/images/areas/patio.webp', fallback: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85', alt: 'Patio de hotel con vegetación' },
+        { title: 'Áreas comunes', detail: 'Lugares para compartir', src: '/images/areas/areas-comunes.webp', fallback: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=85', alt: 'Área común con sala y mobiliario' },
+      ],
+    }
+  : {
+      eyebrow: 'EXPLORE OUR SPACES',
+      title: 'Every corner invites you to stay.',
+      description: 'A look around the spaces at Hotel El Eden.',
+      previous: 'View previous areas',
+      next: 'View more areas',
+      slides: [
+        { title: 'Facade', detail: 'Hotel El Eden · La Piedad', src: '/images/areas/fachada.webp', fallback: '/images/hero/La-Piedad-1.jpeg.webp', alt: 'Hotel El Eden facade' },
+        { title: 'Guest rooms', detail: 'Spaces to rest', src: '/images/areas/habitaciones.webp', fallback: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85', alt: 'Hotel room prepared for guests' },
+        { title: 'Patio and garden', detail: 'A breath of fresh air', src: '/images/areas/patio.webp', fallback: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85', alt: 'Hotel patio with greenery' },
+        { title: 'Shared spaces', detail: 'Places to spend time together', src: '/images/areas/areas-comunes.webp', fallback: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=85', alt: 'Shared lounge with seating' },
+      ],
+    };
+---
+
+<section class="areas-section section-pad" id={lang === 'es' ? 'amenidades' : 'amenities'} aria-labelledby={`areas-title-${lang}`}>
+  <div class="areas-heading">
+    <div>
+      <p class="eyebrow"><span class="section-number">03</span>{labels.eyebrow}</p>
+      <h2 class="display-title" id={`areas-title-${lang}`}>{labels.title}</h2>
+      <p class="areas-description">{labels.description}</p>
+    </div>
+    <div class="areas-controls" aria-label={lang === 'es' ? 'Controles de galería' : 'Gallery controls'}>
+      <button class="areas-arrow" type="button" data-gallery-prev aria-label={labels.previous} title={labels.previous}>
+        <span aria-hidden="true">←</span>
+      </button>
+      <button class="areas-arrow" type="button" data-gallery-next aria-label={labels.next} title={labels.next}>
+        <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </div>
+  <div class="areas-track" data-areas-track tabindex="0" aria-label={labels.description}>
+    {labels.slides.map((slide, index) => (
+      <article class="area-slide">
+        <div class="area-image-wrap">
+          <img src={slide.src} data-fallback={slide.fallback} alt={slide.alt} loading={index === 0 ? 'eager' : 'lazy'} />
+          <span class="area-index">0{index + 1} / 04</span>
+        </div>
+        <div class="area-caption"><h3>{slide.title}</h3><span>{slide.detail}</span></div>
+      </article>
+    ))}
+  </div>
+  <div class="areas-progress" aria-hidden="true"><span data-gallery-progress></span></div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-areas-track]').forEach((track) => {
+    const gallery = track.closest<HTMLElement>('.areas-section');
+    const previous = gallery?.querySelector<HTMLButtonElement>('[data-gallery-prev]');
+    const next = gallery?.querySelector<HTMLButtonElement>('[data-gallery-next]');
+    const progress = gallery?.querySelector<HTMLElement>('[data-gallery-progress]');
+    const firstSlide = track.querySelector<HTMLElement>('.area-slide');
+    if (!gallery || !previous || !next || !firstSlide) return;
+
+    const updateControls = () => {
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      previous.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= maxScroll - 2;
+      if (progress) {
+        const ratio = maxScroll > 0 ? track.scrollLeft / maxScroll : 0;
+        progress.style.transform = `scaleX(${Math.max(0.18, 1 - ratio * 0.82)})`;
+        progress.style.transformOrigin = 'left';
+      }
+    };
+    const scrollOneCard = (direction: number) => {
+      const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
+      track.scrollBy({ left: direction * (firstSlide.getBoundingClientRect().width + gap), behavior: 'smooth' });
+    };
+
+    previous.addEventListener('click', () => scrollOneCard(-1));
+    next.addEventListener('click', () => scrollOneCard(1));
+    track.addEventListener('scroll', updateControls, { passive: true });
+    window.addEventListener('resize', updateControls);
+    updateControls();
+  });
+</script>

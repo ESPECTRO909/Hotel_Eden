@@ -1,9 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { amenities, faq, rooms } from '../../data/hotelData';
+import { faq, rooms } from '../../data/hotelData';
 import { siteConfig } from '../../data/siteConfig';
 import { ui } from '../../i18n/ui';
 import HotelExperience from '../../react/HotelExperience';
+import AreasGallery from '../../components/AreasGallery.astro';
 
 const text = ui.en;
 const hotelSchema = {
@@ -36,7 +37,7 @@ const faqSchema = {
 
   <section class="rooms-section section-pad" id="rooms"><div class="section-heading"><div><p class="eyebrow"><span class="section-number">02</span>{text.roomsLabel}</p><h2 class="display-title">{text.roomsTitle}</h2></div><p class="section-intro">{text.roomsCopy}</p></div><HotelExperience client:load lang="en" rooms={rooms} copy={text} /></section>
 
-  <section class="amenities-section section-pad" id="amenities"><div class="amenities-image-wrap"><img src="/images/amenities/patio.webp" data-fallback="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85" alt="Quiet hotel courtyard with greenery and natural light" loading="lazy" /><span class="image-note">A SLOW DAY · HOTEL EL EDEN</span></div><div class="amenities-copy"><p class="eyebrow"><span class="section-number">03</span>{text.amenityLabel}</p><h2 class="display-title">{text.amenityTitle}</h2><div class="amenities-list">{amenities.en.map((item) => <article class="amenity-row"><span>{item.symbol}</span><div><h3>{item.title}</h3><p>{item.copy}</p></div></article>)}</div></div></section>
+  <AreasGallery lang="en" />
 
   <section class="location-section section-pad" id="location"><div class="location-copy"><p class="eyebrow"><span class="section-number">04</span>{text.locationLabel}</p><h2 class="display-title">{text.locationTitle.split('\n').map((line) => <span>{line}</span>)}</h2><p class="location-description">{text.locationCopy}</p><div class="address-block"><span>{text.addressLabel}</span><p>{siteConfig.address || text.mapNote}</p></div>{siteConfig.directionsUrl && <a class="button button-dark" href={siteConfig.directionsUrl} target="_blank" rel="noreferrer">{text.directions}<span aria-hidden="true">↗</span></a>}{!siteConfig.directionsUrl && <p class="setup-note">{text.mapNote}</p>}</div><div class="location-visual">{siteConfig.mapEmbedUrl ? <iframe src={siteConfig.mapEmbedUrl} title="Hotel El Eden location map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> : <div class="map-placeholder"><span class="map-grid"></span><span class="map-pin"><span></span></span><span class="map-tag">HOTEL EL EDEN · MEXICO</span><span class="map-coordinates">{siteConfig.locationShort.toUpperCase()}</span></div>}</div></section>
 

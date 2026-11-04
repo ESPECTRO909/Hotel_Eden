@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { amenities, faq, rooms } from '../data/hotelData';
+import { faq, rooms } from '../data/hotelData';
 import { siteConfig } from '../data/siteConfig';
 import { ui } from '../i18n/ui';
 import HotelExperience from '../react/HotelExperience';
+import AreasGallery from '../components/AreasGallery.astro';
 
 const text = ui.es;
 const hotelSchema = {
@@ -58,19 +59,7 @@ const faqSchema = {
     <HotelExperience client:load lang="es" rooms={rooms} copy={text} />
   </section>
 
-  <section class="amenities-section section-pad" id="amenidades">
-    <div class="amenities-image-wrap">
-      <img src="/images/amenities/patio.webp" data-fallback="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85" alt="Patio tranquilo del hotel con vegetación y luz natural" loading="lazy" />
-      <span class="image-note">UN DÍA SIN PRISA · HOTEL EL EDEN</span>
-    </div>
-    <div class="amenities-copy">
-      <p class="eyebrow"><span class="section-number">03</span>{text.amenityLabel}</p>
-      <h2 class="display-title">{text.amenityTitle}</h2>
-      <div class="amenities-list">
-        {amenities.es.map((item) => <article class="amenity-row"><span>{item.symbol}</span><div><h3>{item.title}</h3><p>{item.copy}</p></div></article>)}
-      </div>
-    </div>
-  </section>
+  <AreasGallery lang="es" />
 
   <section class="location-section section-pad" id="ubicacion">
     <div class="location-copy">
@@ -103,19 +92,4 @@ const faqSchema = {
     <p>{text.footerLine}</p>
     <div class="footer-meta"><span>© {new Date().getFullYear()} HOTEL EL EDEN</span><a href="/privacidad">{text.privacy}</a><span>{text.rights}</span></div>
   </footer>
-</Layout>---
----
-
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+</Layout>

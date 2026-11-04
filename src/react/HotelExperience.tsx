@@ -293,7 +293,7 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
               <div className="room-card-bottom">
                 <p><strong>{money(room.price, lang)}</strong><span> / {copy.perNight}</span></p>
                 <div className="room-card-actions">
-                  <button className="room-details-button" onClick={() => showDetails(room)}>{copy.details}<ArrowUpRight size={15} /></button>
+                  <button className="room-details-button" onClick={() => showDetails(room)}>{copy.details}<ArrowUpRight size={16} /></button>
                   <button className="room-book-button" onClick={() => startBooking(room)}>{copy.reserve}<ArrowRight size={15} /></button>
                 </div>
               </div>
@@ -308,7 +308,7 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
       {detailRoom && (
         <div className="dialog-backdrop" onClick={(event) => { if (event.target === event.currentTarget) closeDialog(); }} role="presentation">
           <section className="room-dialog" role="dialog" aria-modal="true" aria-labelledby="detail-title" tabIndex={-1} ref={dialogRef}>
-            <header className="dialog-header"><a className="dialog-brand" href={lang === 'es' ? '/' : '/en/'}>Hotel <i>Edén</i></a><button className="icon-button" onClick={closeDialog} aria-label={copy.close}><X size={20} /></button></header>
+            <header className="dialog-header"><a className="dialog-brand" href={lang === 'es' ? '/' : '/en/'}>Hotel El Eden</a><button className="icon-button" onClick={closeDialog} aria-label={copy.close}><X size={20} /></button></header>
             <div className="dialog-scroll">
               <div className="gallery-main">
                 <img src={detailRoom.images[photoIndex].src} data-fallback={detailRoom.images[photoIndex].fallback} alt={detailRoom.images[photoIndex].alt[lang]} />
@@ -322,7 +322,7 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
                 <div className="detail-facts"><span>{detailRoom.size} m²</span><span>{detailRoom.beds[lang]}</span><span>{lang === 'es' ? `Hasta ${detailRoom.capacity} huéspedes` : `Up to ${detailRoom.capacity} guests`}</span></div>
                 <div className="detail-section"><h3>{copy.amenities}</h3><div className="amenity-chips">{detailRoom.amenities.map((item) => <span key={item.es}><Check size={15} />{item[lang]}</span>)}</div></div>
                 <div className="detail-section"><h3>{copy.policies}</h3><ul className="policy-list">{detailRoom.policies.map((item) => <li key={item.es}>{item[lang]}</li>)}</ul></div>
-                <a className="detail-page-link" href={`${lang === 'es' ? '/habitaciones/' : '/en/rooms/'}${detailRoom.slug}/`}>{lang === 'es' ? 'Ver página completa' : 'View full room page'}<ArrowUpRight size={16} /></a>
+                <a className="detail-page-link" href={`${lang === 'es' ? '/habitaciones/' : '/en/rooms/'}${detailRoom.slug}/`}><span>{lang === 'es' ? 'Ver página completa' : 'View full room page'}</span><ArrowUpRight size={17} /></a>
               </div>
             </div>
             <footer className="dialog-footer"><div><strong>{money(detailRoom.price, lang)}</strong><span> / {copy.perNight}</span></div><button className="button button-dark" onClick={() => startBooking(detailRoom)}>{copy.reserve}<ArrowRight size={17} /></button></footer>
