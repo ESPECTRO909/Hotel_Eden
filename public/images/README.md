@@ -1,4 +1,4 @@
-# Fotos del Hotel Edén
+# Fotos del Hotel El Eden
 
 Copia las fotos reales usando estos nombres. No hace falta cambiar el código: el sitio las detectará y dejará de usar las fotos temporales de Unsplash.
 

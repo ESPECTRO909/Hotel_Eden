@@ -1,4 +1,4 @@
-# Hotel Edén
+# Hotel El Eden
 
 Sitio informativo estático bilingüe (español e inglés) hecho con Astro 7, React y Tailwind CSS. El formulario no reserva automáticamente: prepara una solicitud en WhatsApp, que el huésped debe enviar y el hotel debe confirmar.
 

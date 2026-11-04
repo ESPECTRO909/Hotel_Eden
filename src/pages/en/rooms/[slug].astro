@@ -27,7 +27,7 @@ const schema = {
 };
 ---
 
-<Layout lang="en" title={`${room.name.en} | Hotel Edén`} description={room.description.en} image={room.images[0].src} structuredData={schema} alternatePath={`/habitaciones/${room.slug}/`}>
+<Layout lang="en" title={`${room.name.en} | Hotel El Eden`} description={room.description.en} image={room.images[0].src} structuredData={schema} alternatePath={`/habitaciones/${room.slug}/`}>
   <article class="room-page">
     <div class="room-page-top"><a class="back-link" href="/en/#rooms">← All rooms</a><span class="eyebrow">{room.eyebrow.en}</span></div>
     <div class="room-page-heading"><div><h1>{room.name.en}</h1><p>{room.description.en}</p></div><div class="room-page-price"><span>FROM</span><strong>${room.price.toLocaleString('en-US')}</strong><small>MXN · per night</small></div></div>

@@ -269,7 +269,7 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
 
   function floatingWhatsApp() {
     trackEvent('clic_whatsapp_flotante');
-    const message = lang === 'es' ? 'Hola, quisiera información sobre Hotel Edén.' : 'Hello, I would like information about Hotel Edén.';
+    const message = lang === 'es' ? 'Hola, quisiera información sobre Hotel El Eden.' : 'Hello, I would like information about Hotel El Eden.';
     window.open(buildWhatsAppUrl(message), '_blank', 'noopener,noreferrer');
   }
 

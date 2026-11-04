@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'Hotel Edén',
+  name: 'Hotel El Eden',
   whatsappNumber: '3521297591',
   phone: '',
   email: '',
