@@ -1,0 +1,369 @@
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, CalendarDays, Check, ChevronLeft, ChevronRight, Copy, MessageCircle, X } from 'lucide-react';
+import type { Room } from '../data/hotelData';
+import { siteConfig } from '../data/siteConfig';
+import { ui } from '../i18n/ui';
+import { datesOverlap, nightsBetween, todayISO } from '../utils/dates';
+import { readBlockedDates } from '../utils/availability';
+import { sendRequestBackup } from '../utils/backup';
+import { trackEvent } from '../utils/track';
+import { buildWhatsAppMessage, buildWhatsAppUrl, type Reservation } from '../utils/whatsapp';
+
+type Language = 'es' | 'en';
+type Copy = (typeof ui)[Language];
+type Props = { lang: Language; rooms: Room[]; copy: Copy };
+type FormValues = Omit<Reservation, 'language'> & { privacy: boolean; website: string };
+
+const emptyValues = (room: Room): FormValues => ({
+  name: '', phone: '', email: '', checkIn: '', checkOut: '', adults: room.adults, children: 0,
+  arrival: '', comments: '', privacy: false, website: '',
+});
+
+const money = (amount: number, lang: Language) => new Intl.NumberFormat(lang === 'es' ? 'es-MX' : 'en-US', {
+  style: 'currency', currency: siteConfig.currency, maximumFractionDigits: 0,
+}).format(amount);
+
+type DatePickerProps = {
+  label: string;
+  value: string;
+  minDate: string;
+  blockedDates: string[];
+  lang: Language;
+  disabled?: boolean;
+  rangeUnavailable?: (date: string) => boolean;
+  onChange: (date: string) => void;
+};
+
+function DatePickerField({ label, value, minDate, blockedDates, lang, disabled = false, rangeUnavailable, onChange }: DatePickerProps) {
+  const [open, setOpen] = useState(false);
+  const [visibleMonth, setVisibleMonth] = useState(() => {
+    const source = value || todayISO();
+    const [year, month] = source.split('-').map(Number);
+    return new Date(year, month - 1, 1);
+  });
+  const rootRef = useRef<HTMLDivElement>(null);
+  const year = visibleMonth.getFullYear();
+  const month = visibleMonth.getMonth();
+  const dayCount = new Date(year, month + 1, 0).getDate();
+  const blanks = new Date(year, month, 1).getDay();
+  const calendarDays: Array<number | null> = [
+    ...Array.from({ length: blanks }, () => null),
+    ...Array.from({ length: dayCount }, (_, index) => index + 1),
+  ];
+  while (calendarDays.length % 7 !== 0) calendarDays.push(null);
+  const monthLabel = new Intl.DateTimeFormat(lang === 'es' ? 'es-MX' : 'en-US', { month: 'long', year: 'numeric' }).format(visibleMonth);
+  const weekdays = Array.from({ length: 7 }, (_, index) =>
+    new Intl.DateTimeFormat(lang === 'es' ? 'es-MX' : 'en-US', { weekday: 'short' }).format(new Date(2023, 0, index + 1)),
+  );
+
+  useEffect(() => {
+    if (!open) return;
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (event.target instanceof Node && !rootRef.current?.contains(event.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', closeOnOutsideClick);
+    return () => document.removeEventListener('mousedown', closeOnOutsideClick);
+  }, [open]);
+
+  function isoDate(day: number) {
+    return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  }
+
+  function chooseDate(date: string) {
+    onChange(date);
+    setOpen(false);
+  }
+
+  return (
+    <div className="field date-picker-field" ref={rootRef}>
+      <span>{label}</span>
+      <button
+        className="date-picker-trigger"
+        type="button"
+        disabled={disabled}
+        aria-label={`${label}${value ? `: ${value}` : ''}`}
+        aria-haspopup="true"
+        aria-expanded={open}
+        onClick={() => {
+          if (value) {
+            const [selectedYear, selectedMonth] = value.split('-').map(Number);
+            setVisibleMonth(new Date(selectedYear, selectedMonth - 1, 1));
+          }
+          setOpen((current) => !current);
+        }}
+      >
+        <span>{value ? new Intl.DateTimeFormat(lang === 'es' ? 'es-MX' : 'en-US', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(`${value}T12:00:00`)) : 'dd/mm/aaaa'}</span>
+        <CalendarDays size={17} aria-hidden="true" />
+      </button>
+      {open && (
+        <div className="calendar-popover" role="group" aria-label={label}>
+          <div className="calendar-heading">
+            <button type="button" className="calendar-month-button" onClick={() => setVisibleMonth(new Date(year, month - 1, 1))} aria-label={lang === 'es' ? 'Mes anterior' : 'Previous month'}><ChevronLeft size={17} /></button>
+            <span aria-live="polite">{monthLabel}</span>
+            <button type="button" className="calendar-month-button" onClick={() => setVisibleMonth(new Date(year, month + 1, 1))} aria-label={lang === 'es' ? 'Mes siguiente' : 'Next month'}><ChevronRight size={17} /></button>
+          </div>
+          <div className="calendar-grid" role="grid">
+            {weekdays.map((weekday, index) => <span className="calendar-weekday" role="columnheader" key={`${weekday}-${index}`}>{weekday}</span>)}
+            {calendarDays.map((day, index) => {
+              if (!day) return <span className="calendar-empty" role="gridcell" key={`empty-${index}`} />;
+              const date = isoDate(day);
+              const unavailable = date < minDate || blockedDates.includes(date) || Boolean(rangeUnavailable?.(date));
+              const selected = date === value;
+              return <button className={`calendar-day${selected ? ' calendar-day-selected' : ''}${unavailable ? ' calendar-day-blocked' : ''}`} type="button" role="gridcell" key={date} disabled={unavailable} aria-pressed={selected} aria-label={date} onClick={() => chooseDate(date)}>{day}</button>;
+            })}
+          </div>
+          <p className="calendar-legend"><span></span>{lang === 'es' ? 'Fecha no disponible' : 'Unavailable date'}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function HotelExperience({ lang, rooms, copy }: Props) {
+  const [detailRoom, setDetailRoom] = useState<Room | null>(null);
+  const [bookingRoom, setBookingRoom] = useState<Room | null>(null);
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [blockedDates, setBlockedDates] = useState<string[]>([]);
+  const [values, setValues] = useState<FormValues | null>(null);
+  const [error, setError] = useState('');
+  const [sentMessage, setSentMessage] = useState('');
+  const [copied, setCopied] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const activeDialog = Boolean(detailRoom || bookingRoom);
+
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get('reserva');
+    const initialRoom = rooms.find((room) => room.slug === slug);
+    if (initialRoom) {
+      setBookingRoom(initialRoom);
+      setValues(emptyValues(initialRoom));
+      trackEvent('inicio_formulario', { habitacion: initialRoom.slug });
+    }
+  }, [rooms]);
+
+  useEffect(() => {
+    if (!activeDialog) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    dialogRef.current?.focus();
+
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') closeDialog();
+      if (event.key !== 'Tab' || !dialogRef.current) return;
+      const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])',
+      ));
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      previousFocus?.focus();
+    };
+  }, [activeDialog]);
+
+  useEffect(() => {
+    if (!bookingRoom) return;
+    let active = true;
+    readBlockedDates(bookingRoom.slug, bookingRoom.blockedDates).then((dates) => {
+      if (active) setBlockedDates(dates);
+    });
+    return () => { active = false; };
+  }, [bookingRoom]);
+
+  function closeDialog() {
+    setDetailRoom(null);
+    setBookingRoom(null);
+    setSentMessage('');
+    setError('');
+  }
+
+  function showDetails(room: Room) {
+    trackEvent('ver_detalles_habitacion', { habitacion: room.slug });
+    setPhotoIndex(0);
+    setDetailRoom(room);
+  }
+
+  function startBooking(room: Room) {
+    trackEvent('clic_reservar', { habitacion: room.slug });
+    trackEvent('inicio_formulario', { habitacion: room.slug });
+    setValues(emptyValues(room));
+    setSentMessage('');
+    setError('');
+    setBookingRoom(room);
+    setDetailRoom(null);
+  }
+
+  function updateValue<K extends keyof FormValues>(key: K, value: FormValues[K]) {
+    setValues((current) => current ? { ...current, [key]: value } : current);
+    setError('');
+  }
+
+  function changePhoto(step: number) {
+    if (!detailRoom) return;
+    setPhotoIndex((current) => (current + step + detailRoom.images.length) % detailRoom.images.length);
+  }
+
+  function submitReservation(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!bookingRoom || !values) return;
+    if (values.website) return;
+    if (!values.name.trim() || !values.phone.trim() || !values.checkIn || !values.checkOut || !values.privacy) {
+      setError(copy.requiredError);
+      return;
+    }
+    const phoneDigits = values.phone.replace(/\D/g, '');
+    if (phoneDigits.length < 8 || phoneDigits.length > 15) {
+      setError(copy.phoneError);
+      return;
+    }
+    if (values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
+      setError(lang === 'es' ? 'Escribe un correo electrónico válido.' : 'Enter a valid email address.');
+      return;
+    }
+    if (values.checkIn < todayISO() || nightsBetween(values.checkIn, values.checkOut) < 1) {
+      setError(copy.datesError);
+      return;
+    }
+    if (datesOverlap(values.checkIn, values.checkOut, blockedDates)) {
+      setError(lang === 'es' ? 'Hay una fecha ocupada en ese periodo. Elige otras fechas.' : 'One or more dates are unavailable. Choose different dates.');
+      return;
+    }
+    if (values.adults + values.children > bookingRoom.capacity) {
+      setError(copy.capacityError);
+      return;
+    }
+
+    const reservation: Reservation = {
+      name: values.name.trim(), phone: values.phone.trim(), email: values.email.trim(),
+      checkIn: values.checkIn, checkOut: values.checkOut, adults: values.adults,
+      children: values.children, arrival: values.arrival, comments: values.comments.trim(), language: lang,
+    };
+    const message = buildWhatsAppMessage(bookingRoom, reservation);
+    trackEvent('envio_formulario', { habitacion: bookingRoom.slug, noches: nightsBetween(values.checkIn, values.checkOut) });
+    sendRequestBackup({ ...reservation, room: bookingRoom.name.es, total: nightsBetween(values.checkIn, values.checkOut) * bookingRoom.price });
+    setSentMessage(message);
+    window.open(buildWhatsAppUrl(message), '_blank', 'noopener,noreferrer');
+  }
+
+  async function copyMessage() {
+    try {
+      await navigator.clipboard.writeText(sentMessage);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2200);
+    } catch {
+      setError(lang === 'es' ? 'No fue posible copiar el mensaje en este navegador.' : 'This browser could not copy the message.');
+    }
+  }
+
+  function floatingWhatsApp() {
+    trackEvent('clic_whatsapp_flotante');
+    const message = lang === 'es' ? 'Hola, quisiera información sobre Hotel Edén.' : 'Hello, I would like information about Hotel Edén.';
+    window.open(buildWhatsAppUrl(message), '_blank', 'noopener,noreferrer');
+  }
+
+  const nights = values ? nightsBetween(values.checkIn, values.checkOut) : 0;
+  const total = bookingRoom ? nights * bookingRoom.price : 0;
+
+  return (
+    <>
+      <div className="room-grid">
+        {rooms.map((room, index) => (
+          <article className={`room-card room-card-${index + 1}`} key={room.slug}>
+            <button className="room-card-image" onClick={() => showDetails(room)} aria-label={`${copy.details}: ${room.name[lang]}`}>
+              <img src={room.images[0].src} data-fallback={room.images[0].fallback} alt={room.images[0].alt[lang]} loading="lazy" />
+              <span className="room-image-index">0{index + 1} / 0{rooms.length}</span>
+              <span className="room-image-arrow" aria-hidden="true"><ArrowUpRight size={20} /></span>
+            </button>
+            <div className="room-card-content">
+              <p className="room-eyebrow">{room.eyebrow[lang]}</p>
+              <div className="room-card-title-row"><h3>{room.name[lang]}</h3><span>{room.size} m²</span></div>
+              <p className="room-highlights">{room.highlights.slice(0, 2).map((item) => item[lang]).join(' · ')}</p>
+              <div className="room-card-bottom">
+                <p><strong>{money(room.price, lang)}</strong><span> / {copy.perNight}</span></p>
+                <div className="room-card-actions">
+                  <button className="room-details-button" onClick={() => showDetails(room)}>{copy.details}<ArrowUpRight size={15} /></button>
+                  <button className="room-book-button" onClick={() => startBooking(room)}>{copy.reserve}<ArrowRight size={15} /></button>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className="room-grid-note"><span>{lang === 'es' ? 'TARIFAS EN MXN · POR HABITACIÓN' : 'RATES IN MXN · PER ROOM'}</span><span>{lang === 'es' ? 'SOLICITUD SUJETA A CONFIRMACIÓN' : 'REQUEST SUBJECT TO CONFIRMATION'}</span></div>
+
+      {!activeDialog && <button className="whatsapp-float" onClick={floatingWhatsApp} aria-label={lang === 'es' ? 'Escribir por WhatsApp' : 'Message us on WhatsApp'} title={lang === 'es' ? 'Escribir por WhatsApp' : 'Message us on WhatsApp'}><MessageCircle size={23} /><span>{lang === 'es' ? '¿Te ayudamos?' : 'Can we help?'}</span></button>}
+
+      {detailRoom && (
+        <div className="dialog-backdrop" onClick={(event) => { if (event.target === event.currentTarget) closeDialog(); }} role="presentation">
+          <section className="room-dialog" role="dialog" aria-modal="true" aria-labelledby="detail-title" tabIndex={-1} ref={dialogRef}>
+            <header className="dialog-header"><a className="dialog-brand" href={lang === 'es' ? '/' : '/en/'}>Hotel <i>Edén</i></a><button className="icon-button" onClick={closeDialog} aria-label={copy.close}><X size={20} /></button></header>
+            <div className="dialog-scroll">
+              <div className="gallery-main">
+                <img src={detailRoom.images[photoIndex].src} data-fallback={detailRoom.images[photoIndex].fallback} alt={detailRoom.images[photoIndex].alt[lang]} />
+                <button className="gallery-control gallery-prev" onClick={() => changePhoto(-1)} aria-label={lang === 'es' ? 'Foto anterior' : 'Previous photo'}><ChevronLeft size={22} /></button>
+                <button className="gallery-control gallery-next" onClick={() => changePhoto(1)} aria-label={lang === 'es' ? 'Foto siguiente' : 'Next photo'}><ChevronRight size={22} /></button>
+                <span className="gallery-count">{String(photoIndex + 1).padStart(2, '0')} / {String(detailRoom.images.length).padStart(2, '0')}</span>
+              </div>
+              <div className="detail-content">
+                <p className="eyebrow">{detailRoom.eyebrow[lang]}</p><h2 id="detail-title">{detailRoom.name[lang]}</h2>
+                <p className="detail-description">{detailRoom.description[lang]}</p>
+                <div className="detail-facts"><span>{detailRoom.size} m²</span><span>{detailRoom.beds[lang]}</span><span>{lang === 'es' ? `Hasta ${detailRoom.capacity} huéspedes` : `Up to ${detailRoom.capacity} guests`}</span></div>
+                <div className="detail-section"><h3>{copy.amenities}</h3><div className="amenity-chips">{detailRoom.amenities.map((item) => <span key={item.es}><Check size={15} />{item[lang]}</span>)}</div></div>
+                <div className="detail-section"><h3>{copy.policies}</h3><ul className="policy-list">{detailRoom.policies.map((item) => <li key={item.es}>{item[lang]}</li>)}</ul></div>
+                <a className="detail-page-link" href={`${lang === 'es' ? '/habitaciones/' : '/en/rooms/'}${detailRoom.slug}/`}>{lang === 'es' ? 'Ver página completa' : 'View full room page'}<ArrowUpRight size={16} /></a>
+              </div>
+            </div>
+            <footer className="dialog-footer"><div><strong>{money(detailRoom.price, lang)}</strong><span> / {copy.perNight}</span></div><button className="button button-dark" onClick={() => startBooking(detailRoom)}>{copy.reserve}<ArrowRight size={17} /></button></footer>
+          </section>
+        </div>
+      )}
+
+      {bookingRoom && values && (
+        <div className="dialog-backdrop" onClick={(event) => { if (event.target === event.currentTarget) closeDialog(); }} role="presentation">
+          <section className="booking-dialog" role="dialog" aria-modal="true" aria-labelledby="booking-title" tabIndex={-1} ref={dialogRef}>
+            <header className="dialog-header"><button className="back-text-button" onClick={() => { setBookingRoom(null); setDetailRoom(bookingRoom); setSentMessage(''); }}><ArrowLeft size={17} />{lang === 'es' ? 'Habitación' : 'Room details'}</button><button className="icon-button" onClick={closeDialog} aria-label={copy.close}><X size={20} /></button></header>
+            <div className="booking-scroll">
+              <p className="eyebrow">{copy.formSub}</p><h2 id="booking-title">{copy.formTitle}</h2>
+              <div className="booking-room-summary"><img src={bookingRoom.images[0].src} data-fallback={bookingRoom.images[0].fallback} alt="" /><div><strong>{bookingRoom.name[lang]}</strong><span>{money(bookingRoom.price, lang)} / {copy.perNight}</span></div><Check size={19} aria-hidden="true" /></div>
+              <form id="reservation-request-form" className="reservation-form" onSubmit={submitReservation} noValidate>
+                <div className="form-grid">
+                  <label className="field field-wide">{copy.fullName}<input autoComplete="name" value={values.name} onChange={(event) => updateValue('name', event.target.value)} required /></label>
+                  <label className="field">{copy.phone}<input type="tel" inputMode="tel" autoComplete="tel" placeholder="+52 55 1234 5678" value={values.phone} onChange={(event) => updateValue('phone', event.target.value)} required /></label>
+                  <label className="field">{copy.email}<input type="email" inputMode="email" autoComplete="email" value={values.email} onChange={(event) => updateValue('email', event.target.value)} /></label>
+                  <DatePickerField label={copy.checkIn} value={values.checkIn} minDate={todayISO()} blockedDates={blockedDates} lang={lang} onChange={(date) => updateValue('checkIn', date)} />
+                  <DatePickerField label={copy.checkOut} value={values.checkOut} minDate={values.checkIn || todayISO()} blockedDates={blockedDates} lang={lang} disabled={!values.checkIn} rangeUnavailable={(date) => Boolean(values.checkIn) && datesOverlap(values.checkIn, date, blockedDates)} onChange={(date) => updateValue('checkOut', date)} />
+                  <label className="field">{copy.adults}<select value={values.adults} onChange={(event) => updateValue('adults', Number(event.target.value))}>{Array.from({ length: bookingRoom.capacity }, (_, index) => index + 1).map((number) => <option value={number} key={number}>{number}</option>)}</select></label>
+                  <label className="field">{copy.children}<select value={values.children} onChange={(event) => updateValue('children', Number(event.target.value))}>{Array.from({ length: bookingRoom.capacity + 1 }, (_, index) => index).map((number) => <option value={number} key={number}>{number}</option>)}</select></label>
+                  <label className="field field-wide">{copy.arrival}<input type="time" value={values.arrival} onChange={(event) => updateValue('arrival', event.target.value)} /></label>
+                  <label className="field field-wide">{copy.comments}<textarea rows={3} value={values.comments} onChange={(event) => updateValue('comments', event.target.value)} /></label>
+                </div>
+                <label className="honeypot" aria-hidden="true">No completar<input tabIndex={-1} autoComplete="off" value={values.website} onChange={(event) => updateValue('website', event.target.value)} /></label>
+                <label className="privacy-checkbox"><input type="checkbox" checked={values.privacy} onChange={(event) => updateValue('privacy', event.target.checked)} required /><span>{copy.privacyAccept} <a href={lang === 'es' ? '/privacidad' : '/en/privacy'} target="_blank" rel="noreferrer">{lang === 'es' ? 'Leer aviso' : 'Read notice'}</a></span></label>
+                {values.checkIn && values.checkOut && datesOverlap(values.checkIn, values.checkOut, blockedDates) && <p className="field-error">{lang === 'es' ? 'Hay fechas ocupadas en el periodo elegido.' : 'Some dates in this period are unavailable.'}</p>}
+                {values.checkIn && values.checkOut && nights < 1 && <p className="field-error">{copy.datesError}</p>}
+                {values.checkIn && values.checkOut && nights > 0 && <div className="estimate-row"><span>{nights} {copy.nights} × {money(bookingRoom.price, lang)}</span><strong>{money(total, lang)}</strong><small>{copy.estimated}</small></div>}
+                {error && <p className="form-error" role="alert">{error}</p>}
+                <p className="confirmation-note">{copy.availabilityNote}</p>
+                <p className="whatsapp-config-note">{copy.whatsappSetup}</p>
+              </form>
+              {sentMessage && <div className="sent-panel" role="status"><Check size={20} /><div><strong>{lang === 'es' ? 'Solicitud preparada' : 'Request prepared'}</strong><p>{lang === 'es' ? 'Confirma el envío en WhatsApp. Si no se abrió, copia el mensaje y envíalo desde la app.' : 'Confirm sending in WhatsApp. If it did not open, copy the message and send it in the app.'}</p><button className="copy-button" onClick={copyMessage}>{copied ? <Check size={16} /> : <Copy size={16} />}{copied ? copy.copied : copy.copyMessage}</button></div></div>}
+            </div>
+            <footer className="booking-footer"><button className="button button-dark submit-button" type="submit" form="reservation-request-form" disabled={Boolean(sentMessage)}>{copy.submit}<ArrowRight size={18} /></button></footer>
+          </section>
+        </div>
+      )}
+    </>
+  );
+}

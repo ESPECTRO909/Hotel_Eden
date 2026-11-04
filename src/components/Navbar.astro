@@ -1,0 +1,42 @@
+---
+import { siteConfig } from '../data/siteConfig';
+import { Menu } from 'lucide-react';
+const { lang = 'es' } = Astro.props;
+const english = lang === 'en';
+const home = english ? '/en/' : '/';
+const languageHref = english ? '/' : '/en/';
+const roomsAnchor = english ? 'rooms' : 'habitaciones';
+const experienceAnchor = english ? 'experience' : 'experiencia';
+const locationAnchor = english ? 'location' : 'ubicacion';
+---
+
+<nav class="site-nav" aria-label={english ? 'Main navigation' : 'Navegación principal'}>
+  <a class="brand" href={home} aria-label={`${siteConfig.name} · ${english ? 'home' : 'inicio'}`}>
+    <span class="brand-mark" aria-hidden="true">E</span>
+    <span class="brand-name">Hotel <i>Edén</i></span>
+  </a>
+  <div class="nav-links">
+    <a href={`${home}#${roomsAnchor}`}>{english ? 'Rooms' : 'Habitaciones'}</a>
+    <a href={`${home}#${experienceAnchor}`}>{english ? 'The experience' : 'La experiencia'}</a>
+    <a href={`${home}#${locationAnchor}`}>{english ? 'Location' : 'Ubicación'}</a>
+  </div>
+  <details class="mobile-nav">
+    <summary aria-label={english ? 'Open navigation menu' : 'Abrir menú de navegación'}><Menu size={19} aria-hidden="true" /></summary>
+    <div class="mobile-nav-panel">
+      <a href={`${home}#${roomsAnchor}`}>{english ? 'Rooms' : 'Habitaciones'}</a>
+      <a href={`${home}#${experienceAnchor}`}>{english ? 'The experience' : 'La experiencia'}</a>
+      <a href={`${home}#${locationAnchor}`}>{english ? 'Location' : 'Ubicación'}</a>
+    </div>
+  </details>
+  <div class="nav-actions">
+    <a class="language-link" href={languageHref} data-language-switch>{english ? 'ES' : 'EN'} <span aria-hidden="true">↗</span></a>
+    <a class="nav-cta" href={`${home}#${roomsAnchor}`}>{english ? 'Check dates' : 'Consultar fechas'} <span aria-hidden="true">↗</span></a>
+  </div>
+</nav>
+
+<script>
+  import { trackEvent } from '../utils/track';
+  document.querySelectorAll('[data-language-switch]').forEach((link) => {
+    link.addEventListener('click', () => trackEvent('cambio_idioma'));
+  });
+</script>

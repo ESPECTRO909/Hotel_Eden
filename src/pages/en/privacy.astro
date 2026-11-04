@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { siteConfig } from '../../data/siteConfig';
+---
+
+<Layout lang="en" title="Privacy notice | Hotel Edén" description="How Hotel Edén handles personal information submitted with a stay request." alternatePath="/privacidad">
+  <article class="privacy-page">
+    <a class="back-link" href="/en/">← Back to Hotel Edén</a>
+    <p class="eyebrow">HOTEL EDÉN · MEXICO</p><h1>Privacy notice</h1>
+    <p class="privacy-lead">This notice explains how we use the information you share when requesting a stay.</p>
+    <section><h2>Controller and contact</h2><p>The data controller is {siteConfig.name}. Address: {siteConfig.address}. Contact email: {siteConfig.email || 'to be confirmed'}.</p></section>
+    <section><h2>Information and purpose</h2><p>We may receive your name, phone number, email, stay dates, guest count, estimated arrival time and comments. These details are used only to handle, follow up on and confirm your booking request.</p></section>
+    <section><h2>Channels and retention</h2><p>When you submit the form, a WhatsApp message is prepared and you must confirm sending it in that app. If a backup service is configured, the request may also be sent to that service. Information is retained only as long as needed to handle the request and meet applicable obligations.</p></section>
+    <section><h2>Analytics</h2><p>The site may record interaction events to measure feature usage. No analytics provider or measurement cookies are enabled in this demo version.</p></section>
+    <section><h2>Your rights</h2><p>You may request access, correction, deletion or objection by contacting {siteConfig.email || 'the hotel contact email, to be confirmed'}. Requests will be handled under applicable Mexican law.</p></section>
+    <p class="privacy-disclaimer">The hotel must complete its contact details and have this notice reviewed by legal counsel before publication.</p>
+  </article>
+</Layout>

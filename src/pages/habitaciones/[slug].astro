@@ -1,0 +1,38 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { rooms, type Room } from '../../data/hotelData';
+import { siteConfig } from '../../data/siteConfig';
+import type { GetStaticPaths } from 'astro';
+
+interface Props {
+  room: Room;
+}
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return rooms.map((room) => ({ params: { slug: room.slug }, props: { room } }));
+}
+
+const { room } = Astro.props;
+const homeUrl = `/?reserva=${room.slug}#habitaciones`;
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'HotelRoom',
+  name: room.name.es,
+  description: room.description.es,
+  occupancy: { '@type': 'QuantitativeValue', maxValue: room.capacity },
+  bed: room.beds.es,
+  image: room.images.map((image) => image.src),
+  offers: { '@type': 'Offer', price: room.price, priceCurrency: siteConfig.currency, availability: 'https://schema.org/LimitedAvailability' },
+  containedInPlace: { '@type': 'Hotel', name: siteConfig.name },
+};
+---
+
+<Layout title={`${room.name.es} | Hotel Edén`} description={room.description.es} image={room.images[0].src} structuredData={schema} alternatePath={`/en/rooms/${room.slug}/`}>
+  <article class="room-page">
+    <div class="room-page-top"><a class="back-link" href="/#habitaciones">← Todas las habitaciones</a><span class="eyebrow">{room.eyebrow.es}</span></div>
+    <div class="room-page-heading"><div><h1>{room.name.es}</h1><p>{room.description.es}</p></div><div class="room-page-price"><span>DESDE</span><strong>${room.price.toLocaleString('es-MX')}</strong><small>MXN · por noche</small></div></div>
+    <div class="room-gallery"><img src={room.images[0].src} data-fallback={room.images[0].fallback} alt={room.images[0].alt.es} /><div>{room.images.slice(1).map((image) => <img src={image.src} data-fallback={image.fallback} alt={image.alt.es} loading="lazy" />)}</div></div>
+    <div class="room-page-info"><div><p class="eyebrow">EL ESPACIO</p><h2>Un lugar para hacer pausa.</h2><p>{room.description.es}</p><div class="room-facts"><span>{room.size} m²</span><span>{room.beds.es}</span><span>Hasta {room.capacity} huéspedes</span></div></div><div><p class="eyebrow">INCLUYE</p><ul>{room.amenities.map((amenity) => <li>{amenity.es}</li>)}</ul><p class="eyebrow policy-heading">POLÍTICAS</p><ul>{room.policies.map((policy) => <li>{policy.es}</li>)}</ul></div></div>
+    <div class="room-page-book"><div><strong>Desde ${room.price.toLocaleString('es-MX')} MXN</strong><span>por noche · total estimado en la solicitud</span></div><a class="button button-dark" href={homeUrl}>Consultar esta habitación <span aria-hidden="true">↗</span></a></div>
+  </article>
+</Layout>

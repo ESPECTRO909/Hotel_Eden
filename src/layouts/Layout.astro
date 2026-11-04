@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import { siteConfig } from '../data/siteConfig';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: 'es' | 'en';
+  image?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  alternatePath?: string;
+}
+
+const { title, description, lang = 'es', image = 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85', structuredData, alternatePath } = Astro.props;
+const baseUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const canonical = new URL(Astro.url.pathname, baseUrl || 'https://hotel-eden.example').toString();
+const alternate = alternatePath ?? (lang === 'es' ? `/en${Astro.url.pathname === '/' ? '/' : Astro.url.pathname}` : Astro.url.pathname.replace(/^\/en/, '') || '/');
+const schema = structuredData ?? {
+  '@context': 'https://schema.org',
+  '@type': 'Hotel',
+  name: siteConfig.name,
+  description,
+  ...(siteConfig.address ? { address: { '@type': 'PostalAddress', streetAddress: siteConfig.address, addressCountry: 'MX' } } : {}),
+  telephone: siteConfig.phone || undefined,
+  image,
+};
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3f1ea" />
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'es' ? 'es_MX' : 'en_US'} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <script is:inline>
+      document.addEventListener('error', (event) => {
+        const image = event.target;
+        if (!(image instanceof HTMLImageElement) || !image.dataset.fallback || image.dataset.fallbackApplied) return;
+        image.dataset.fallbackApplied = 'true';
+        image.src = image.dataset.fallback;
+      }, true);
+    </script>
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={lang === 'es' ? 'en' : 'es'} href={new URL(alternate, baseUrl || 'https://hotel-eden.example').toString()} />
+    <link rel="alternate" hreflang="x-default" href={new URL(lang === 'es' ? Astro.url.pathname : alternate, baseUrl || 'https://hotel-eden.example').toString()} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">{lang === 'es' ? 'Saltar al contenido' : 'Skip to content'}</a>
+    <Navbar lang={lang} />
+    <main id="contenido"><slot /></main>
+  </body>
+</html>
