@@ -64,10 +64,9 @@ const faqSchema = {
   <section class="location-section section-pad" id="ubicacion">
     <div class="location-copy">
       <p class="eyebrow"><span class="section-number">04</span>{text.locationLabel}</p>
-      <h2 class="display-title">{text.locationTitle.split('\n').map((line) => <span>{line}</span>)}</h2>
-      <p class="location-description">{text.locationCopy}</p>
+      <h2 class="display-title">{text.locationTitle}</h2>
       <div class="address-block"><span>{text.addressLabel}</span><p>{siteConfig.address || text.mapNote}</p></div>
-      {siteConfig.directionsUrl && <a class="button button-dark" href={siteConfig.directionsUrl} target="_blank" rel="noreferrer">{text.directions}<span aria-hidden="true">↗</span></a>}
+      {siteConfig.directionsUrl && <a class="button button-directions" href={siteConfig.directionsUrl} target="_blank" rel="noreferrer">{text.directions}<span aria-hidden="true">↗</span></a>}
       {!siteConfig.directionsUrl && <p class="setup-note">{text.mapNote}</p>}
     </div>
     <div class="location-visual">

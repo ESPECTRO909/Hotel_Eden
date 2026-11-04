@@ -168,11 +168,12 @@ img { display: block; max-width: 100%; border-radius: var(--radius-image); }
 .location-section { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 9%; padding-top: 112px; padding-bottom: 112px; color: var(--paper); background: var(--forest); }
 .location-copy .eyebrow { color: #dfb566; }
 .location-copy .section-number { color: #d4c08f; }
-.location-copy .display-title { margin-bottom: 20px; }
-.location-description { max-width: 400px; color: rgba(243,241,234,.68); }
-.address-block { margin: 37px 0 25px; padding-top: 16px; border-top: 1px solid rgba(243,241,234,.25); }
+.location-copy .display-title { max-width: 570px; margin-bottom: 28px; font-size: 64px; line-height: 1.08; }
+.address-block { margin: 0 0 24px; padding-top: 16px; border-top: 1px solid rgba(243,241,234,.25); }
 .address-block > span { color: #d4c08f; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; }
-.address-block p { margin: 6px 0 0; font-family: var(--serif); font-size: 17px; }
+.address-block p { margin: 8px 0 0; font-family: var(--serif); font-size: 20px; line-height: 1.5; }
+.button-directions { min-height: 52px; border-radius: var(--radius-control); color: #381b16; background: #e2b45c; }
+.button-directions:hover { color: #381b16; background: #f0c974; }
 .setup-note { color: #d4c08f; font-size: 11px; }
 .location-visual { position: relative; min-height: 400px; overflow: hidden; border-radius: var(--radius-surface); background: #d8d6ca; color: var(--ink); }
 .location-visual iframe { width: 100%; height: 100%; min-height: 400px; border: 0; filter: saturate(.7); }
@@ -402,7 +403,7 @@ img { display: block; max-width: 100%; border-radius: var(--radius-image); }
   .area-caption span { text-align: left; }
   .areas-progress { margin-top: 16px; }
   .location-section { grid-template-columns: 1fr; gap: 32px; padding-top: 78px; padding-bottom: 68px; }
-  .location-copy .display-title { font-size: 39px; }
+  .location-copy .display-title { max-width: 440px; margin-bottom: 22px; font-size: 48px; }
   .location-visual, .location-visual iframe { min-height: 300px; }
   .faq-section { grid-template-columns: 1fr; gap: 29px; padding-top: 78px; padding-bottom: 88px; }
   .faq-heading .display-title { font-size: 42px; }
