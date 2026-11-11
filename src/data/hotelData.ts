@@ -137,6 +137,11 @@ export const rooms: Room[] = [
   },
 ];
 
+const prices = rooms.map((room) => room.price);
+const lowest = Math.min(...prices).toLocaleString('es-MX');
+const highest = Math.max(...prices).toLocaleString('es-MX');
+export const priceRange = `$${lowest} - $${highest} ${siteConfig.currency}`;
+
 export type Area = {
   title: LocalizedText;
   detail: LocalizedText;

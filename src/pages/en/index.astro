@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { faq, rooms } from '../../data/hotelData';
+import { faq, priceRange, rooms } from '../../data/hotelData';
 import { siteConfig } from '../../data/siteConfig';
 import { ui } from '../../i18n/ui';
 import HotelExperience from '../../react/HotelExperience';
@@ -15,7 +15,7 @@ const hotelSchema = {
   ...(siteConfig.address ? { address: { '@type': 'PostalAddress', streetAddress: siteConfig.address, addressCountry: 'MX' } } : {}),
   checkinTime: siteConfig.checkIn,
   checkoutTime: siteConfig.checkOut,
-  priceRange: '$2,150 - $3,650 MXN',
+  priceRange,
   image: rooms.flatMap((room) => room.images.map((image) => image.src)),
 };
 const faqSchema = {
