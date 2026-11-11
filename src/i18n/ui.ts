@@ -35,7 +35,6 @@ export const ui = {
     roomIncludes: 'INCLUYE',
     roomPolicies: 'POLÍTICAS',
 
-    amenityLabel: 'LO ESENCIAL, BIEN PENSADO',
     amenityTitle: 'El lujo de tener tiempo.',
 
     areasEyebrow: 'CONOCE NUESTROS ESPACIOS',
@@ -107,8 +106,6 @@ export const ui = {
     whatsappGreeting: 'Hola, quisiera información sobre Hotel El Eden.',
     fullRoomPage: 'Ver página completa',
 
-    unavailableDatesError: 'Hay una fecha ocupada en ese periodo. Elige otras fechas.',
-    periodUnavailable: 'Hay fechas ocupadas en el periodo elegido.',
     copyError: 'No fue posible copiar el mensaje en este navegador.',
     sentTitle: 'Solicitud preparada',
     sentCopy: 'Confirma el envío en WhatsApp. Si no se abrió, copia el mensaje y envíalo desde la app.',
@@ -149,7 +146,6 @@ export const ui = {
     roomIncludes: 'INCLUDED',
     roomPolicies: 'POLICIES',
 
-    amenityLabel: 'THE ESSENTIALS, CONSIDERED',
     amenityTitle: 'The luxury of time.',
 
     areasEyebrow: 'EXPLORE OUR SPACES',
@@ -221,8 +217,6 @@ export const ui = {
     whatsappGreeting: 'Hello, I would like information about Hotel El Eden.',
     fullRoomPage: 'View full room page',
 
-    unavailableDatesError: 'One or more dates are unavailable. Choose different dates.',
-    periodUnavailable: 'Some dates in this period are unavailable.',
     copyError: 'This browser could not copy the message.',
     sentTitle: 'Request prepared',
     sentCopy: 'Confirm sending in WhatsApp. If it did not open, copy the message and send it in the app.',

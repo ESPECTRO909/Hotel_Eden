@@ -2,7 +2,7 @@
 
 Copia las fotos reales usando estos nombres. No hace falta cambiar el código: el sitio las detectará y dejará de usar las fotos temporales de Unsplash.
 
-Usa formato `.webp` o `.jpg`. Si usas `.jpg`, actualiza la extensión `.webp` en `src/data/hotelData.ts` y en `src/pages/index.astro` y `src/pages/en/index.astro`.
+Usa formato `.webp`.
 
 ## Portada
 

@@ -1,0 +1,42 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { siteConfig } from '../data/siteConfig';
+import { ui } from '../i18n/ui';
+import type { Room } from '../data/hotelData';
+import AmenityList from '../react/AmenityList';
+
+interface Props {
+  room: Room;
+  lang: 'es' | 'en';
+}
+
+const { room, lang } = Astro.props;
+const text = ui[lang];
+const site = Astro.site!;
+const home = lang === 'es' ? '/' : '/en/';
+const roomsAnchor = lang === 'es' ? 'habitaciones' : 'rooms';
+const locale = lang === 'es' ? 'es-MX' : 'en-US';
+const homeUrl = `${home}?reserva=${room.slug}#${roomsAnchor}`;
+const alternatePath = lang === 'es' ? `/en/rooms/${room.slug}/` : `/habitaciones/${room.slug}/`;
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'HotelRoom',
+  name: room.name[lang],
+  description: room.description[lang],
+  occupancy: { '@type': 'QuantitativeValue', maxValue: room.capacity },
+  bed: room.beds[lang],
+  image: room.images.map((image) => new URL(image.src, site).toString()),
+  offers: { '@type': 'Offer', price: room.price, priceCurrency: siteConfig.currency, availability: 'https://schema.org/LimitedAvailability' },
+  containedInPlace: { '@type': 'Hotel', name: siteConfig.name },
+};
+---
+
+<Layout lang={lang} title={`${room.name[lang]} | ${siteConfig.name}`} description={room.description[lang]} image={room.images[0].src} structuredData={schema} alternatePath={alternatePath}>
+  <article class="room-page">
+    <div class="room-page-top"><a class="back-link" href={`${home}#${roomsAnchor}`}>← {text.roomBack}</a><span class="eyebrow">{room.eyebrow[lang]}</span></div>
+    <div class="room-page-heading"><div><h1>{room.name[lang]}</h1><p>{room.description[lang]}</p></div><div class="room-page-price"><span>{text.roomPriceLabel}</span><strong>${room.price.toLocaleString(locale)}</strong><small>{siteConfig.currency} · {text.perNight}</small></div></div>
+    <div class="room-gallery"><img src={room.images[0].src} data-fallback={room.images[0].fallback} alt={room.images[0].alt[lang]} /><div>{room.images.slice(1).map((image) => <img src={image.src} data-fallback={image.fallback} alt={image.alt[lang]} loading="lazy" />)}</div></div>
+    <div class="room-page-info"><div><p class="eyebrow">{text.roomSpaceLabel}</p><h2>{text.roomSpaceTitle}</h2><p>{room.description[lang]}</p><div class="room-facts"><span>{room.beds[lang]}</span><span>{text.upTo} {room.capacity} {text.guests}</span></div></div><div><p class="eyebrow">{text.roomIncludes}</p><AmenityList items={room.amenities.map((amenity) => amenity[lang])} /><p class="eyebrow policy-heading">{text.roomPolicies}</p><ul class="room-policy-list">{room.policies.map((policy) => <li>{policy[lang]}</li>)}</ul></div></div>
+    <div class="room-page-book"><div><strong>{text.roomBookFrom} ${room.price.toLocaleString(locale)} {siteConfig.currency}</strong><span>{text.roomBookNote}</span></div><a class="button button-dark" href={homeUrl}>{text.roomEnquire} <span aria-hidden="true">↗</span></a></div>
+  </article>
+</Layout>

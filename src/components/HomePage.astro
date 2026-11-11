@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { faq, priceRange, rooms } from '../data/hotelData';
+import { siteConfig } from '../data/siteConfig';
+import { ui } from '../i18n/ui';
+import HotelExperience from '../react/HotelExperience';
+import AreasGallery from './AreasGallery.astro';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const text = ui[lang];
+const site = Astro.site!;
+const home = lang === 'es' ? '/' : '/en/';
+const roomsAnchor = lang === 'es' ? 'habitaciones' : 'rooms';
+const experienceAnchor = lang === 'es' ? 'experiencia' : 'experience';
+const amenitiesAnchor = lang === 'es' ? 'amenidades' : 'amenities';
+const locationAnchor = lang === 'es' ? 'ubicacion' : 'location';
+const faqAnchor = lang === 'es' ? 'preguntas' : 'faq';
+const privacyHref = lang === 'es' ? '/privacidad' : '/en/privacy';
+const title = lang === 'es' ? 'Hotel El Eden | Descansa a tu manera' : 'Hotel El Eden | Rest your way';
+const mapTitle = lang === 'es' ? 'Mapa de ubicación del Hotel El Eden' : 'Hotel El Eden location map';
+const heroAlt = lang === 'es' ? 'Hotel El Eden en La Piedad' : 'Hotel El Eden in La Piedad';
+const closingAlt = lang === 'es' ? 'Luz de tarde en una estancia serena' : 'Afternoon light in a quiet interior';
+const closingEyebrow = lang === 'es' ? 'HOTEL EL EDEN · MÉXICO' : 'HOTEL EL EDEN · MEXICO';
+const hotelSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Hotel',
+  name: siteConfig.name,
+  description: text.heroCopy,
+  address: { '@type': 'PostalAddress', streetAddress: siteConfig.address, addressCountry: 'MX' },
+  checkinTime: siteConfig.checkIn,
+  checkoutTime: siteConfig.checkOut,
+  telephone: siteConfig.phone,
+  email: siteConfig.email,
+  priceRange,
+  image: rooms.flatMap((room) => room.images.map((image) => new URL(image.src, site).toString())),
+};
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq[lang].map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+};
+---
+
+<Layout lang={lang} title={title} description={text.heroCopy} structuredData={[hotelSchema, faqSchema]}>
+  <section class="hero" aria-labelledby="hero-title">
+    <img class="hero-image" src="/images/hero/La-Piedad-1.jpeg.webp" data-fallback="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=2200&q=90" alt={heroAlt} fetchpriority="high" />
+    <div class="hero-shade"></div>
+    <div class="hero-copy">
+      <p class="eyebrow eyebrow-light"><span></span>{text.heroKicker}</p>
+      <h1 id="hero-title">{text.heroTitle}</h1>
+      <p class="hero-description">{text.heroCopy}</p>
+      <a class="button button-light" href={`#${roomsAnchor}`}>{text.heroExplore}<span aria-hidden="true">↘</span></a>
+    </div>
+    <div class="hero-caption"><span>{text.heroNote}</span><span class="caption-line"></span><span>{siteConfig.locationShort.toUpperCase()}</span></div>
+    <span class="hero-index">01 / 04</span>
+  </section>
+
+  <section class="intro section-pad" id={experienceAnchor}>
+    <div class="intro-label"><span class="section-number">01</span><p class="eyebrow">{text.introLabel}</p></div>
+    <div class="intro-body">
+      <h2 class="display-title">{text.introTitle.split('\n').map((line) => <span>{line}</span>)}</h2>
+      <div class="intro-aside">
+        <p>{text.introCopy}</p>
+        <a class="text-link" href={`#${amenitiesAnchor}`}>{text.amenityTitle}<span aria-hidden="true">↘</span></a>
+      </div>
+    </div>
+    <div class="intro-stamp" aria-hidden="true"><span>H</span><span>·</span><span>E</span></div>
+  </section>
+
+  <section class="rooms-section section-pad" id={roomsAnchor}>
+    <div class="section-heading">
+      <div><p class="eyebrow"><span class="section-number">02</span>{text.roomsLabel}</p><h2 class="display-title">{text.roomsTitle}</h2></div>
+      <p class="section-intro">{text.roomsCopy}</p>
+    </div>
+    <HotelExperience client:load rooms={rooms} copy={text} />
+  </section>
+
+  <AreasGallery lang={lang} />
+
+  <section class="location-section section-pad" id={locationAnchor}>
+    <div class="location-copy">
+      <p class="eyebrow"><span class="section-number">04</span>{text.locationLabel}</p>
+      <h2 class="display-title">{text.locationTitle}</h2>
+      <div class="address-block"><span>{text.addressLabel}</span><p>{siteConfig.address}</p></div>
+      <a class="button button-directions" href={siteConfig.directionsUrl} target="_blank" rel="noreferrer">{text.directions}<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="location-visual">
+      <iframe src={siteConfig.mapEmbedUrl} title={mapTitle} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </section>
+
+  <section class="faq-section section-pad" id={faqAnchor}>
+    <div class="faq-heading"><p class="eyebrow"><span class="section-number">05</span>{text.faqLabel}</p><h2 class="display-title">{text.faqTitle}</h2></div>
+    <div class="faq-list">
+      {faq[lang].map((item, index) => <details class="faq-item"><summary><span class="faq-index">0{index + 1}</span><span>{item.q}</span><span class="faq-toggle" aria-hidden="true">+</span></summary><p>{item.a}</p></details>)}
+    </div>
+  </section>
+
+  <section class="closing-cta">
+    <img src="/images/hero/cierre.webp" data-fallback="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=2200&q=85" alt={closingAlt} loading="lazy" />
+    <div class="closing-content"><p class="eyebrow eyebrow-light">{closingEyebrow}</p><h2>{text.ctaTitle.split('\n').map((line) => <span>{line}</span>)}</h2><p>{text.ctaCopy}</p><a class="button button-light" href={`#${roomsAnchor}`}>{text.ctaButton}<span aria-hidden="true">↗</span></a></div>
+  </section>
+
+  <footer class="site-footer">
+    <a class="brand footer-brand" href={home} aria-label={`${siteConfig.name} ${lang === 'es' ? 'inicio' : 'home'}`}><span class="brand-mark">E</span><span class="brand-name">{siteConfig.name}</span></a>
+    <p>{text.footerLine}</p>
+    <div class="footer-meta"><span>© {new Date().getFullYear()} {siteConfig.name.toUpperCase()}</span><a href={`tel:+52${siteConfig.phone.replace(/\D/g, '')}`}>{siteConfig.phone}</a><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a><a href={privacyHref}>{text.privacy}</a><span>{text.rights}</span></div>
+  </footer>
+</Layout>

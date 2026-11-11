@@ -23,9 +23,9 @@ const schema = structuredData ?? {
   '@type': 'Hotel',
   name: siteConfig.name,
   description,
-  ...(siteConfig.address ? { address: { '@type': 'PostalAddress', streetAddress: siteConfig.address, addressCountry: 'MX' } } : {}),
-  telephone: siteConfig.phone || undefined,
-  email: siteConfig.email || undefined,
+  address: { '@type': 'PostalAddress', streetAddress: siteConfig.address, addressCountry: 'MX' },
+  telephone: siteConfig.phone,
+  email: siteConfig.email,
   image: absoluteImage,
 };
 ---

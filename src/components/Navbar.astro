@@ -16,24 +16,25 @@ const languageHref = alternateHref ?? (english ? '/' : '/en/');
 const roomsAnchor = english ? 'rooms' : 'habitaciones';
 const experienceAnchor = english ? 'experience' : 'experiencia';
 const locationAnchor = english ? 'location' : 'ubicacion';
+const links = [
+  { href: `${home}#${roomsAnchor}`, label: text.navRooms },
+  { href: `${home}#${experienceAnchor}`, label: text.navExperience },
+  { href: `${home}#${locationAnchor}`, label: text.navLocation },
+];
 ---
 
 <nav class="site-nav" aria-label={english ? 'Main navigation' : 'Navegación principal'}>
   <a class="brand" href={home} aria-label={`${siteConfig.name} · ${english ? 'home' : 'inicio'}`}>
     <span class="brand-mark" aria-hidden="true">E</span>
-    <span class="brand-name">Hotel El Eden</span>
+    <span class="brand-name">{siteConfig.name}</span>
   </a>
   <div class="nav-links">
-    <a href={`${home}#${roomsAnchor}`}>{text.navRooms}</a>
-    <a href={`${home}#${experienceAnchor}`}>{text.navExperience}</a>
-    <a href={`${home}#${locationAnchor}`}>{text.navLocation}</a>
+    {links.map((link) => <a href={link.href}>{link.label}</a>)}
   </div>
   <details class="mobile-nav">
     <summary aria-label={english ? 'Open navigation menu' : 'Abrir menú de navegación'}><Menu size={19} aria-hidden="true" /></summary>
     <div class="mobile-nav-panel">
-      <a href={`${home}#${roomsAnchor}`}>{text.navRooms}</a>
-      <a href={`${home}#${experienceAnchor}`}>{text.navExperience}</a>
-      <a href={`${home}#${locationAnchor}`}>{text.navLocation}</a>
+      {links.map((link) => <a href={link.href}>{link.label}</a>)}
     </div>
   </details>
   <div class="nav-actions">

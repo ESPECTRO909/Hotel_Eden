@@ -9,6 +9,5 @@ export const siteConfig = {
   directionsUrl: 'https://www.google.com/maps/dir/?api=1&destination=20.3450905%2C-102.0254319',
   checkIn: '13:00',
   checkOut: '12:00',
-  blockedDates: [] as string[],
   currency: 'MXN',
 };

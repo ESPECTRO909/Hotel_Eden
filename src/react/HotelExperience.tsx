@@ -3,13 +3,13 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, CalendarDays, Check, ChevronLeft, 
 import type { Room } from '../data/hotelData';
 import { siteConfig } from '../data/siteConfig';
 import { ui } from '../i18n/ui';
-import { datesOverlap, nightsBetween, todayISO } from '../utils/dates';
+import { nightsBetween, todayISO } from '../utils/dates';
 import { buildWhatsAppMessage, buildWhatsAppUrl, type Reservation } from '../utils/whatsapp';
 import AmenityList from './AmenityList';
 
 type Language = 'es' | 'en';
 type Copy = (typeof ui)[Language];
-type Props = { lang: Language; rooms: Room[]; copy: Copy };
+type Props = { rooms: Room[]; copy: Copy };
 type FormValues = Omit<Reservation, 'language'> & { privacy: boolean; website: string };
 
 const emptyValues = (room: Room): FormValues => ({
@@ -25,14 +25,12 @@ type DatePickerProps = {
   label: string;
   value: string;
   minDate: string;
-  blockedDates: string[];
   copy: Copy;
   disabled?: boolean;
-  rangeUnavailable?: (date: string) => boolean;
   onChange: (date: string) => void;
 };
 
-function DatePickerField({ label, value, minDate, blockedDates, copy, disabled = false, rangeUnavailable, onChange }: DatePickerProps) {
+function DatePickerField({ label, value, minDate, copy, disabled = false, onChange }: DatePickerProps) {
   const lang = copy.language;
   const [open, setOpen] = useState(false);
   const [visibleMonth, setVisibleMonth] = useState(() => {
@@ -106,7 +104,7 @@ function DatePickerField({ label, value, minDate, blockedDates, copy, disabled =
             {calendarDays.map((day, index) => {
               if (!day) return <span className="calendar-empty" role="gridcell" key={`empty-${index}`} />;
               const date = isoDate(day);
-              const unavailable = date < minDate || blockedDates.includes(date) || Boolean(rangeUnavailable?.(date));
+              const unavailable = date < minDate;
               const selected = date === value;
               return <button className={`calendar-day${selected ? ' calendar-day-selected' : ''}${unavailable ? ' calendar-day-blocked' : ''}`} type="button" role="gridcell" key={date} disabled={unavailable} aria-pressed={selected} aria-label={date} onClick={() => chooseDate(date)}>{day}</button>;
             })}
@@ -118,7 +116,8 @@ function DatePickerField({ label, value, minDate, blockedDates, copy, disabled =
   );
 }
 
-export default function HotelExperience({ lang, rooms, copy }: Props) {
+export default function HotelExperience({ rooms, copy }: Props) {
+  const lang = copy.language;
   const [detailRoom, setDetailRoom] = useState<Room | null>(null);
   const [bookingRoom, setBookingRoom] = useState<Room | null>(null);
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -197,10 +196,6 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
       setError(copy.datesError);
       return;
     }
-    if (datesOverlap(values.checkIn, values.checkOut, blockedDates)) {
-      setError(copy.unavailableDatesError);
-      return;
-    }
     if (values.adults + values.children > bookingRoom.capacity) {
       setError(copy.capacityError);
       return;
@@ -231,7 +226,6 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
     window.open(buildWhatsAppUrl(message), '_blank', 'noopener,noreferrer');
   }
 
-  const blockedDates = bookingRoom ? [...new Set([...siteConfig.blockedDates, ...bookingRoom.blockedDates])] : [];
   const nights = values ? nightsBetween(values.checkIn, values.checkOut) : 0;
   const total = bookingRoom ? nights * bookingRoom.price : 0;
 
@@ -239,7 +233,7 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
     <>
       <div className="room-grid">
         {rooms.map((room, index) => (
-          <article className={`room-card room-card-${index + 1}`} key={room.slug}>
+          <article className="room-card" key={room.slug}>
             <button className="room-card-image" onClick={() => showDetails(room)} aria-label={`${copy.details}: ${room.name[lang]}`}>
               <img src={room.images[0].src} data-fallback={room.images[0].fallback} alt={room.images[0].alt[lang]} loading="lazy" />
               <span className="room-image-index">0{index + 1} / 0{rooms.length}</span>
@@ -267,7 +261,7 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
       {detailRoom && (
         <dialog className="dialog-backdrop" aria-labelledby="detail-title" ref={dialogRef} onClick={(event) => { if (event.target === event.currentTarget) closeDialog(); }}>
           <section className="room-dialog">
-            <header className="dialog-header"><a className="dialog-brand" href={lang === 'es' ? '/' : '/en/'}>Hotel El Eden</a><button className="icon-button" onClick={closeDialog} aria-label={copy.close}><X size={20} /></button></header>
+            <header className="dialog-header"><a className="dialog-brand" href={lang === 'es' ? '/' : '/en/'}>{siteConfig.name}</a><button className="icon-button" onClick={closeDialog} aria-label={copy.close}><X size={20} /></button></header>
             <div className="dialog-scroll">
               <div className="gallery-main">
                 <img src={detailRoom.images[photoIndex].src} data-fallback={detailRoom.images[photoIndex].fallback} alt={detailRoom.images[photoIndex].alt[lang]} />
@@ -301,8 +295,8 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
                   <label className="field field-wide">{copy.fullName}<input autoComplete="name" value={values.name} onChange={(event) => updateValue('name', event.target.value)} required /></label>
                   <label className="field">{copy.phone}<input type="tel" inputMode="tel" autoComplete="tel" placeholder="+52 55 1234 5678" value={values.phone} onChange={(event) => updateValue('phone', event.target.value)} required /></label>
                   <label className="field">{copy.email}<input type="email" inputMode="email" autoComplete="email" value={values.email} onChange={(event) => updateValue('email', event.target.value)} /></label>
-                  <DatePickerField label={copy.checkIn} value={values.checkIn} minDate={todayISO()} blockedDates={blockedDates} copy={copy} onChange={(date) => updateValue('checkIn', date)} />
-                  <DatePickerField label={copy.checkOut} value={values.checkOut} minDate={values.checkIn || todayISO()} blockedDates={blockedDates} copy={copy} disabled={!values.checkIn} rangeUnavailable={(date) => Boolean(values.checkIn) && datesOverlap(values.checkIn, date, blockedDates)} onChange={(date) => updateValue('checkOut', date)} />
+                  <DatePickerField label={copy.checkIn} value={values.checkIn} minDate={todayISO()} copy={copy} onChange={(date) => updateValue('checkIn', date)} />
+                  <DatePickerField label={copy.checkOut} value={values.checkOut} minDate={values.checkIn || todayISO()} copy={copy} disabled={!values.checkIn} onChange={(date) => updateValue('checkOut', date)} />
                   <label className="field">{copy.adults}<select value={values.adults} onChange={(event) => updateValue('adults', Number(event.target.value))}>{Array.from({ length: bookingRoom.capacity }, (_, index) => index + 1).map((number) => <option value={number} key={number}>{number}</option>)}</select></label>
                   <label className="field">{copy.children}<select value={values.children} onChange={(event) => updateValue('children', Number(event.target.value))}>{Array.from({ length: bookingRoom.capacity + 1 }, (_, index) => index).map((number) => <option value={number} key={number}>{number}</option>)}</select></label>
                   <label className="field field-wide">{copy.arrival}<input type="time" value={values.arrival} onChange={(event) => updateValue('arrival', event.target.value)} /></label>
@@ -310,7 +304,6 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
                 </div>
                 <label className="honeypot" aria-hidden="true">No completar<input tabIndex={-1} autoComplete="off" value={values.website} onChange={(event) => updateValue('website', event.target.value)} /></label>
                 <label className="privacy-checkbox"><input type="checkbox" checked={values.privacy} onChange={(event) => updateValue('privacy', event.target.checked)} required /><span>{copy.privacyAccept} <a href={lang === 'es' ? '/privacidad' : '/en/privacy'} target="_blank" rel="noreferrer">{copy.readNotice}</a></span></label>
-                {values.checkIn && values.checkOut && datesOverlap(values.checkIn, values.checkOut, blockedDates) && <p className="field-error">{copy.periodUnavailable}</p>}
                 {values.checkIn && values.checkOut && nights < 1 && <p className="field-error">{copy.datesError}</p>}
                 {values.checkIn && values.checkOut && nights > 0 && <div className="estimate-row"><span>{nights} {copy.nights} × {money(bookingRoom.price, lang)}</span><strong>{money(total, lang)}</strong><small>{copy.estimated}</small></div>}
                 {error && <p className="form-error" role="alert">{error}</p>}

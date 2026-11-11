@@ -1,17 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { privacy } from '../data/hotelData';
-
-const content = privacy.es;
+import PrivacyPage from '../components/PrivacyPage.astro';
 ---
 
-<Layout title={content.title} description={content.description} alternatePath="/en/privacy">
-  <article class="privacy-page">
-    <a class="back-link" href="/">← {content.back}</a>
-    <p class="eyebrow">{content.eyebrow}</p><h1>{content.heading}</h1>
-    <p class="privacy-lead">{content.lead}</p>
-    {content.sections.map((section) => (
-      <section><h2>{section.heading}</h2><p>{section.body}</p></section>
-    ))}
-  </article>
-</Layout>
+<PrivacyPage lang="es" />

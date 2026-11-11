@@ -1,4 +1,4 @@
-import { BedDouble, Check, Coffee, ShowerHead, Wind, Wifi } from 'lucide-react';
+import { Check, Wifi } from 'lucide-react';
 
 type AmenityListProps = {
   items: string[];
@@ -6,13 +6,7 @@ type AmenityListProps = {
 };
 
 function amenityIcon(label: string) {
-  const normalized = label.toLocaleLowerCase();
-  if (normalized.includes('wi-fi') || normalized.includes('wifi')) return Wifi;
-  if (normalized.includes('cama') || normalized.includes('bed')) return BedDouble;
-  if (normalized.includes('ducha') || normalized.includes('shower') || normalized.includes('baño') || normalized.includes('bathroom')) return ShowerHead;
-  if (normalized.includes('café') || normalized.includes('cafe') || normalized.includes('coffee') || normalized.includes('desayuno') || normalized.includes('breakfast')) return Coffee;
-  if (normalized.includes('aire acondicionado') || normalized.includes('air conditioning')) return Wind;
-  return Check;
+  return label.toLocaleLowerCase().includes('wi-fi') ? Wifi : Check;
 }
 
 export default function AmenityList({ items, className = '' }: AmenityListProps) {

@@ -14,7 +14,6 @@ export type Room = {
   amenities: LocalizedText[];
   policies: LocalizedText[];
   images: { src: string; fallback: string; alt: LocalizedText }[];
-  blockedDates: string[];
 };
 
 const photo = (path: string, id: string) => ({
@@ -56,7 +55,6 @@ export const rooms: Room[] = [
       { ...photo('rooms/sencilla/02', 'photo-1616486338812-3dadae4b4ace'), alt: { es: 'Interior de la Habitación Sencilla', en: 'Standard Room interior' } },
       { ...photo('rooms/sencilla/03', 'photo-1600210492486-724fe5c67fb0'), alt: { es: 'Rincón de descanso de la Habitación Sencilla', en: 'Standard Room seating corner' } },
     ],
-    blockedDates: [],
   },
   {
     slug: 'doble',
@@ -80,7 +78,6 @@ export const rooms: Room[] = [
       { ...photo('rooms/doble/02', 'photo-1615874694520-474822394e73'), alt: { es: 'Detalle de textiles de la Habitación Doble', en: 'Twin Room textile detail' } },
       { ...photo('rooms/doble/03', 'photo-1600607687939-ce8a6c25118c'), alt: { es: 'Espacio de descanso de la Habitación Doble', en: 'Twin Room resting area' } },
     ],
-    blockedDates: [],
   },
   {
     slug: 'triple',
@@ -104,7 +101,6 @@ export const rooms: Room[] = [
       { ...photo('rooms/triple/02', 'photo-1618221195710-dd6b41faaea6'), alt: { es: 'Interior de la Habitación Triple', en: 'Triple Room interior' } },
       { ...photo('rooms/triple/03', 'photo-1617104678098-de229db51175'), alt: { es: 'Área de descanso de la Habitación Triple', en: 'Triple Room resting area' } },
     ],
-    blockedDates: [],
   },
   {
     slug: 'cuadruple',
@@ -128,7 +124,6 @@ export const rooms: Room[] = [
       { ...photo('rooms/cuadruple/02', 'photo-1616594039964-ae9021a400a0'), alt: { es: 'Interior de la Habitación Cuádruple', en: 'Quadruple Room interior' } },
       { ...photo('rooms/cuadruple/03', 'photo-1600607687939-ce8a6c25118c'), alt: { es: 'Detalle de la Habitación Cuádruple', en: 'Quadruple Room detail' } },
     ],
-    blockedDates: [],
   },
 ];
 
