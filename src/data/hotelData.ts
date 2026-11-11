@@ -1,3 +1,5 @@
+import { siteConfig } from './siteConfig';
+
 export type LocalizedText = { es: string; en: string };
 
 export type Room = {
@@ -7,8 +9,6 @@ export type Room = {
   description: LocalizedText;
   price: number;
   capacity: number;
-  adults: number;
-  children: number;
   size: number;
   beds: LocalizedText;
   highlights: LocalizedText[];
@@ -18,9 +18,9 @@ export type Room = {
   blockedDates: string[];
 };
 
-const photo = (path: string, id: string, width = 1200) => ({
+const photo = (path: string, id: string) => ({
   src: `/images/${path}.webp`,
-  fallback: `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=85`,
+  fallback: `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&q=85`,
 });
 
 export const rooms: Room[] = [
@@ -34,8 +34,6 @@ export const rooms: Room[] = [
     },
     price: 2850,
     capacity: 2,
-    adults: 2,
-    children: 0,
     size: 38,
     beds: { es: '1 cama king', en: '1 king bed' },
     highlights: [
@@ -73,8 +71,6 @@ export const rooms: Room[] = [
     },
     price: 2150,
     capacity: 2,
-    adults: 2,
-    children: 0,
     size: 29,
     beds: { es: '1 cama queen', en: '1 queen bed' },
     highlights: [
@@ -112,8 +108,6 @@ export const rooms: Room[] = [
     },
     price: 3650,
     capacity: 4,
-    adults: 2,
-    children: 2,
     size: 52,
     beds: { es: '1 cama king y 2 individuales', en: '1 king and 2 single beds' },
     highlights: [
@@ -161,7 +155,7 @@ export const amenities = {
 export const faq = {
   es: [
     { q: '¿Cómo funciona la solicitud de reserva?', a: 'Elige una habitación y tus fechas. La solicitud se abre en WhatsApp con los datos organizados; el equipo del hotel confirma disponibilidad y precio final.' },
-    { q: '¿A qué hora puedo entrar y salir?', a: `El check-in es desde las ${'15:00'} y el check-out hasta las ${'12:00'}. Si necesitas otro horario, consúltalo al enviar tu solicitud.` },
+    { q: '¿A qué hora puedo entrar y salir?', a: `El check-in es desde las ${siteConfig.checkIn} y el check-out hasta las ${siteConfig.checkOut}. Si necesitas otro horario, consúltalo al enviar tu solicitud.` },
     { q: '¿El precio mostrado es definitivo?', a: 'Es un estimado por noche. El hotel confirma el importe final y la disponibilidad antes de formalizar la reserva.' },
     { q: '¿Puedo solicitar una habitación para niños?', a: 'La Suite Familiar admite hasta cuatro huéspedes. Indica el número de adultos y niños en el formulario para recibir confirmación.' },
     { q: '¿Cómo se gestionan mis datos?', a: 'Los datos se usan para atender tu solicitud y se comparten por WhatsApp. Consulta el aviso de privacidad para conocer el alcance y tus derechos.' },
