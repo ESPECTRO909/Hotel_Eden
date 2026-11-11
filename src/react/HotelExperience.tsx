@@ -315,7 +315,6 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
                 {values.checkIn && values.checkOut && nights > 0 && <div className="estimate-row"><span>{nights} {copy.nights} × {money(bookingRoom.price, lang)}</span><strong>{money(total, lang)}</strong><small>{copy.estimated}</small></div>}
                 {error && <p className="form-error" role="alert">{error}</p>}
                 <p className="confirmation-note">{copy.availabilityNote}</p>
-                <p className="whatsapp-config-note">{copy.whatsappSetup}</p>
               </form>
               {sentMessage && <div className="sent-panel" role="status"><Check size={20} /><div><strong>{copy.sentTitle}</strong><p>{copy.sentCopy}</p><button className="copy-button" onClick={copyMessage}>{copied ? <Check size={16} /> : <Copy size={16} />}{copied ? copy.copied : copy.copyMessage}</button></div></div>}
             </div>

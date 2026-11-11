@@ -15,6 +15,8 @@ const hotelSchema = {
   ...(siteConfig.address ? { address: { '@type': 'PostalAddress', streetAddress: siteConfig.address, addressCountry: 'MX' } } : {}),
   checkinTime: siteConfig.checkIn,
   checkoutTime: siteConfig.checkOut,
+  telephone: siteConfig.phone,
+  email: siteConfig.email,
   priceRange,
   image: rooms.flatMap((room) => room.images.map((image) => image.src)),
 };
@@ -89,6 +91,6 @@ const faqSchema = {
   <footer class="site-footer">
     <a class="brand footer-brand" href="/" aria-label="Hotel El Eden inicio"><span class="brand-mark">E</span><span class="brand-name">Hotel El Eden</span></a>
     <p>{text.footerLine}</p>
-    <div class="footer-meta"><span>© {new Date().getFullYear()} HOTEL EL EDEN</span><a href="/privacidad">{text.privacy}</a><span>{text.rights}</span></div>
+    <div class="footer-meta"><span>© {new Date().getFullYear()} HOTEL EL EDEN</span><a href={`tel:+52${siteConfig.phone.replace(/\D/g, '')}`}>{siteConfig.phone}</a><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a><a href="/privacidad">{text.privacy}</a><span>{text.rights}</span></div>
   </footer>
 </Layout>
