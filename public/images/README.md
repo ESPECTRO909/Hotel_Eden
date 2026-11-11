@@ -9,16 +9,12 @@ Usa formato `.webp` o `.jpg`. Si usas `.jpg`, actualiza la extensión `.webp` en
 - `hero/portada.webp`: imagen principal horizontal, ideal 2200 × 1400 px o mayor.
 - `hero/cierre.webp`: imagen horizontal para la sección final, ideal 2200 × 1200 px.
 
-## Amenidades
-
-- `amenities/patio.webp`: patio, jardín o piscina, ideal 1400 × 1500 px.
-
 ## Galería de áreas
 
 - `areas/fachada.webp`: fachada del hotel. Si falta, la galería usa la foto de portada.
 - `areas/habitaciones.webp`: vista general de las habitaciones.
-- `areas/patio.webp`: patio o jardín.
-- `areas/areas-comunes.webp`: recepción, sala o área común.
+- `areas/estacionamiento.webp`: estacionamiento del hotel (15 cajones).
+- `areas/lobby.webp`: lobby y recepción.
 
 ## Habitaciones
 

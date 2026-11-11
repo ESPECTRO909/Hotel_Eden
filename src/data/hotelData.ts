@@ -39,7 +39,7 @@ export const rooms: Room[] = [
     name: { es: 'Habitación Sencilla', en: 'Standard Room' },
     eyebrow: { es: 'Lo esencial, bien hecho', en: 'The essentials, done well' },
     description: {
-      es: 'Una habitación práctica con la cama que prefieras —individual, matrimonial, king o queen—, wifi gratuito y estacionamiento en el centro de La Piedad.',
+      es: 'Una habitación práctica con la cama que prefieras —individual, matrimonial, king o queen—, Wi-Fi gratuito y estacionamiento en el centro de La Piedad.',
       en: 'A practical room with the bed of your choice —single, double, king or queen—, free Wi-Fi and parking in the center of La Piedad.',
     },
     price: 600,
@@ -63,7 +63,7 @@ export const rooms: Room[] = [
     name: { es: 'Habitación Doble', en: 'Twin Room' },
     eyebrow: { es: 'Para compartir', en: 'Room to share' },
     description: {
-      es: 'Dos camas individuales, wifi gratuito y estacionamiento. Una opción sencilla para viajar acompañado en el centro de La Piedad.',
+      es: 'Dos camas individuales, Wi-Fi gratuito y estacionamiento. Una opción sencilla para viajar acompañado en el centro de La Piedad.',
       en: 'Two single beds, free Wi-Fi and parking. A simple option for traveling with someone in the center of La Piedad.',
     },
     price: 650,
@@ -87,7 +87,7 @@ export const rooms: Room[] = [
     name: { es: 'Habitación Triple', en: 'Triple Room' },
     eyebrow: { es: 'En buena compañía', en: 'Good company' },
     description: {
-      es: 'Tres camas individuales para viajar en grupo, con wifi gratuito y estacionamiento en el centro de La Piedad.',
+      es: 'Tres camas individuales para viajar en grupo, con Wi-Fi gratuito y estacionamiento en el centro de La Piedad.',
       en: 'Three single beds for traveling as a group, with free Wi-Fi and parking in the center of La Piedad.',
     },
     price: 700,
@@ -111,7 +111,7 @@ export const rooms: Room[] = [
     name: { es: 'Habitación Cuádruple', en: 'Quadruple Room' },
     eyebrow: { es: 'Espacio para todos', en: 'Room for everyone' },
     description: {
-      es: 'Dos camas matrimoniales para familias o grupos de hasta cuatro personas, con wifi gratuito y estacionamiento en el centro de La Piedad.',
+      es: 'Dos camas matrimoniales para familias o grupos de hasta cuatro personas, con Wi-Fi gratuito y estacionamiento en el centro de La Piedad.',
       en: 'Two double beds for families or groups of up to four, with free Wi-Fi and parking in the center of La Piedad.',
     },
     price: 750,
@@ -148,24 +148,9 @@ export type Area = {
 export const areas: Area[] = [
   { title: { es: 'Fachada', en: 'Facade' }, detail: { es: 'Hotel El Eden · La Piedad', en: 'Hotel El Eden · La Piedad' }, src: '/images/areas/fachada.webp', fallback: '/images/hero/La-Piedad-1.jpeg.webp', alt: { es: 'Fachada de Hotel El Eden', en: 'Hotel El Eden facade' } },
   { title: { es: 'Habitaciones', en: 'Guest rooms' }, detail: { es: 'Espacios para descansar', en: 'Spaces to rest' }, src: '/images/areas/habitaciones.webp', fallback: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85', alt: { es: 'Habitación de hotel preparada para huéspedes', en: 'Hotel room prepared for guests' } },
-  { title: { es: 'Patio y jardín', en: 'Patio and garden' }, detail: { es: 'Un respiro al aire libre', en: 'A breath of fresh air' }, src: '/images/areas/patio.webp', fallback: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85', alt: { es: 'Patio de hotel con vegetación', en: 'Hotel patio with greenery' } },
-  { title: { es: 'Áreas comunes', en: 'Shared spaces' }, detail: { es: 'Lugares para compartir', en: 'Places to spend time together' }, src: '/images/areas/areas-comunes.webp', fallback: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=85', alt: { es: 'Área común con sala y mobiliario', en: 'Shared lounge with seating' } },
+  { title: { es: 'Estacionamiento', en: 'Parking' }, detail: { es: '15 cajones para tu auto', en: '15 spaces for your car' }, src: '/images/areas/estacionamiento.webp', fallback: '/images/hero/La-Piedad-1.jpeg.webp', alt: { es: 'Estacionamiento de Hotel El Eden', en: 'Hotel El Eden parking' } },
+  { title: { es: 'Lobby', en: 'Lobby' }, detail: { es: 'Recepción y bienvenida', en: 'Reception and welcome' }, src: '/images/areas/lobby.webp', fallback: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=85', alt: { es: 'Lobby de Hotel El Eden', en: 'Hotel El Eden lobby' } },
 ];
-
-export const amenities = {
-  es: [
-    { title: 'Un comienzo lento', copy: 'Desayuno preparado con ingredientes locales, servido sin prisa.', symbol: '01' },
-    { title: 'Agua y jardín', copy: 'Una piscina pequeña para refrescarse entre horas de sol.', symbol: '02' },
-    { title: 'Espacios para respirar', copy: 'Patios y rincones verdes para leer, conversar o no hacer nada.', symbol: '03' },
-    { title: 'Siempre conectados', copy: 'Wi-Fi de alta velocidad en habitaciones y áreas comunes.', symbol: '04' },
-  ],
-  en: [
-    { title: 'A slower morning', copy: 'Breakfast made with local ingredients, served without a rush.', symbol: '01' },
-    { title: 'Water and garden', copy: 'A small pool to cool off between hours in the sun.', symbol: '02' },
-    { title: 'Room to breathe', copy: 'Green corners and quiet patios for reading, talking or doing nothing.', symbol: '03' },
-    { title: 'Stay connected', copy: 'High-speed Wi-Fi in rooms and shared spaces.', symbol: '04' },
-  ],
-};
 
 export const faq = {
   es: [
