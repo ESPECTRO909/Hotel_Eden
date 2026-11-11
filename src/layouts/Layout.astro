@@ -23,6 +23,7 @@ const schema = structuredData ?? {
   description,
   ...(siteConfig.address ? { address: { '@type': 'PostalAddress', streetAddress: siteConfig.address, addressCountry: 'MX' } } : {}),
   telephone: siteConfig.phone || undefined,
+  email: siteConfig.email || undefined,
   image,
 };
 ---

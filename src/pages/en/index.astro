@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { faq, rooms } from '../../data/hotelData';
+import { faq, priceRange, rooms } from '../../data/hotelData';
 import { siteConfig } from '../../data/siteConfig';
 import { ui } from '../../i18n/ui';
 import HotelExperience from '../../react/HotelExperience';
@@ -15,7 +15,9 @@ const hotelSchema = {
   ...(siteConfig.address ? { address: { '@type': 'PostalAddress', streetAddress: siteConfig.address, addressCountry: 'MX' } } : {}),
   checkinTime: siteConfig.checkIn,
   checkoutTime: siteConfig.checkOut,
-  priceRange: '$2,150 - $3,650 MXN',
+  telephone: siteConfig.phone,
+  email: siteConfig.email,
+  priceRange,
   image: rooms.flatMap((room) => room.images.map((image) => image.src)),
 };
 const faqSchema = {
@@ -45,5 +47,5 @@ const faqSchema = {
 
   <section class="closing-cta"><img src="/images/hero/cierre.webp" data-fallback="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=2200&q=85" alt="Afternoon light in a quiet interior" loading="lazy" /><div class="closing-content"><p class="eyebrow eyebrow-light">HOTEL EL EDEN · MEXICO</p><h2>{text.ctaTitle.split('\n').map((line) => <span>{line}</span>)}</h2><p>{text.ctaCopy}</p><a class="button button-light" href="#rooms">{text.ctaButton}<span aria-hidden="true">↗</span></a></div></section>
 
-  <footer class="site-footer"><a class="brand footer-brand" href="/en/" aria-label="Hotel El Eden home"><span class="brand-mark">E</span><span class="brand-name">Hotel El Eden</span></a><p>{text.footerLine}</p><div class="footer-meta"><span>© {new Date().getFullYear()} HOTEL EL EDEN</span><a href="/en/privacy">{text.privacy}</a><span>{text.rights}</span></div></footer>
+  <footer class="site-footer"><a class="brand footer-brand" href="/en/" aria-label="Hotel El Eden home"><span class="brand-mark">E</span><span class="brand-name">Hotel El Eden</span></a><p>{text.footerLine}</p><div class="footer-meta"><span>© {new Date().getFullYear()} HOTEL EL EDEN</span><a href={`tel:+52${siteConfig.phone.replace(/\D/g, '')}`}>{siteConfig.phone}</a><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a><a href="/en/privacy">{text.privacy}</a><span>{text.rights}</span></div></footer>
 </Layout>

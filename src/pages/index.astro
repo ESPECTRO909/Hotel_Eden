@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { faq, rooms } from '../data/hotelData';
+import { faq, priceRange, rooms } from '../data/hotelData';
 import { siteConfig } from '../data/siteConfig';
 import { ui } from '../i18n/ui';
 import HotelExperience from '../react/HotelExperience';
@@ -15,7 +15,9 @@ const hotelSchema = {
   ...(siteConfig.address ? { address: { '@type': 'PostalAddress', streetAddress: siteConfig.address, addressCountry: 'MX' } } : {}),
   checkinTime: siteConfig.checkIn,
   checkoutTime: siteConfig.checkOut,
-  priceRange: '$2,150 - $3,650 MXN',
+  telephone: siteConfig.phone,
+  email: siteConfig.email,
+  priceRange,
   image: rooms.flatMap((room) => room.images.map((image) => image.src)),
 };
 const faqSchema = {
@@ -89,6 +91,6 @@ const faqSchema = {
   <footer class="site-footer">
     <a class="brand footer-brand" href="/" aria-label="Hotel El Eden inicio"><span class="brand-mark">E</span><span class="brand-name">Hotel El Eden</span></a>
     <p>{text.footerLine}</p>
-    <div class="footer-meta"><span>© {new Date().getFullYear()} HOTEL EL EDEN</span><a href="/privacidad">{text.privacy}</a><span>{text.rights}</span></div>
+    <div class="footer-meta"><span>© {new Date().getFullYear()} HOTEL EL EDEN</span><a href={`tel:+52${siteConfig.phone.replace(/\D/g, '')}`}>{siteConfig.phone}</a><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a><a href="/privacidad">{text.privacy}</a><span>{text.rights}</span></div>
   </footer>
 </Layout>
