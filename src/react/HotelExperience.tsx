@@ -247,7 +247,7 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
             </button>
             <div className="room-card-content">
               <p className="room-eyebrow">{room.eyebrow[lang]}</p>
-              <div className="room-card-title-row"><h3>{room.name[lang]}</h3><span>{room.size} m²</span></div>
+              <div className="room-card-title-row"><h3>{room.name[lang]}</h3></div>
               <p className="room-highlights">{room.highlights.slice(0, 2).map((item) => item[lang]).join(' · ')}</p>
               <div className="room-card-bottom">
                 <p><strong>{money(room.price, lang)}</strong><span> / {copy.perNight}</span></p>
@@ -278,7 +278,7 @@ export default function HotelExperience({ lang, rooms, copy }: Props) {
               <div className="detail-content">
                 <p className="eyebrow">{detailRoom.eyebrow[lang]}</p><h2 id="detail-title">{detailRoom.name[lang]}</h2>
                 <p className="detail-description">{detailRoom.description[lang]}</p>
-                <div className="detail-facts"><span>{detailRoom.size} m²</span><span>{detailRoom.beds[lang]}</span><span>{`${copy.upTo} ${detailRoom.capacity} ${copy.guests}`}</span></div>
+                <div className="detail-facts"><span>{detailRoom.beds[lang]}</span><span>{`${copy.upTo} ${detailRoom.capacity} ${copy.guests}`}</span></div>
                 <div className="detail-section"><h3>{copy.amenities}</h3><AmenityList className="amenity-chips" items={detailRoom.amenities.map((item) => item[lang])} /></div>
                 <div className="detail-section"><h3>{copy.policies}</h3><ul className="policy-list">{detailRoom.policies.map((item) => <li key={item.es}>{item[lang]}</li>)}</ul></div>
                 <a className="detail-page-link" href={`${lang === 'es' ? '/habitaciones/' : '/en/rooms/'}${detailRoom.slug}/`}><span>{copy.fullRoomPage}</span><ArrowUpRight size={17} /></a>

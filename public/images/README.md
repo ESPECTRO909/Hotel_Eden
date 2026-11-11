@@ -24,9 +24,10 @@ Usa formato `.webp` o `.jpg`. Si usas `.jpg`, actualiza la extensión `.webp` en
 
 Cada carpeta necesita tres imágenes. La primera es la portada de la tarjeta y la galería comienza por ella.
 
-- `rooms/suite-jardin/01.webp`, `02.webp`, `03.webp`
-- `rooms/habitacion-terra/01.webp`, `02.webp`, `03.webp`
-- `rooms/suite-familiar/01.webp`, `02.webp`, `03.webp`
+- `rooms/sencilla/01.webp`, `02.webp`, `03.webp`
+- `rooms/doble/01.webp`, `02.webp`, `03.webp`
+- `rooms/triple/01.webp`, `02.webp`, `03.webp`
+- `rooms/cuadruple/01.webp`, `02.webp`, `03.webp`
 
 Para mejores resultados usa fotos horizontales de al menos 1400 × 1000 px, bien iluminadas y optimizadas para web. Evita subir archivos originales pesados directamente desde la cámara.
 
