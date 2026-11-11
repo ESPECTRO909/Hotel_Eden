@@ -309,8 +309,7 @@ dialog.dialog-backdrop::backdrop { background: transparent; }
 .privacy-lead { max-width: 640px; margin: 20px 0 46px; color: var(--muted); font-family: var(--serif); font-size: 21px; line-height: 1.5; }
 .privacy-page section { padding: 20px 0; border-top: 1px solid var(--line); }
 .privacy-page section h2 { margin: 0 0 8px; font-family: var(--serif); font-size: 21px; font-weight: 400; }
-.privacy-page section p, .privacy-disclaimer { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
-.privacy-disclaimer { margin-top: 25px; padding: 13px; border-radius: var(--radius-control); color: #77573c; background: #ede3cf; }
+.privacy-page section p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
 
 @keyframes rise-in {
   from { opacity: 0; transform: translateY(14px); }

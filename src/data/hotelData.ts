@@ -168,3 +168,76 @@ export const faq = {
     { q: 'How is my information handled?', a: 'Your details are used to handle your request and are shared through WhatsApp. See the privacy notice for the full scope and your rights.' },
   ],
 };
+
+export type PrivacyContent = {
+  title: string;
+  description: string;
+  eyebrow: string;
+  heading: string;
+  back: string;
+  lead: string;
+  sections: { heading: string; body: string }[];
+};
+
+export const privacy: { es: PrivacyContent; en: PrivacyContent } = {
+  es: {
+    title: 'Aviso de privacidad | Hotel El Eden',
+    description: 'Información sobre el tratamiento de datos personales en Hotel El Eden.',
+    eyebrow: 'HOTEL EL EDEN · MÉXICO',
+    heading: 'Aviso de privacidad',
+    back: 'Volver a Hotel El Eden',
+    lead: 'Este aviso describe cómo se utilizan los datos que compartes al enviar una solicitud de estancia.',
+    sections: [
+      {
+        heading: 'Responsable y contacto',
+        body: `El responsable del tratamiento es ${siteConfig.name}. Dirección: ${siteConfig.address}. Teléfono: ${siteConfig.phone}. Correo de contacto: ${siteConfig.email}.`,
+      },
+      {
+        heading: 'Datos y finalidad',
+        body: 'Podemos recibir tu nombre, teléfono, correo electrónico, fechas de estancia, número de huéspedes, hora estimada de llegada y comentarios. Se utilizan exclusivamente para atender, dar seguimiento y confirmar tu solicitud de reserva.',
+      },
+      {
+        heading: 'Canales y conservación',
+        body: 'Al enviar el formulario, se prepara un mensaje en WhatsApp y debes confirmar su envío dentro de esa aplicación. El hotel recibe la solicitud en ese chat y la conserva solo durante el tiempo necesario para gestionar la estancia y cumplir las obligaciones aplicables.',
+      },
+      {
+        heading: 'Cookies y analítica',
+        body: 'Este sitio no utiliza cookies de analítica, publicidad ni seguimiento. No se registran eventos de navegación ni se comparte información con proveedores de analítica.',
+      },
+      {
+        heading: 'Tus derechos',
+        body: `Puedes solicitar acceso, rectificación, cancelación u oposición al tratamiento de tus datos escribiendo a ${siteConfig.email}. La solicitud se atenderá conforme a la normativa aplicable en México.`,
+      },
+    ],
+  },
+  en: {
+    title: 'Privacy notice | Hotel El Eden',
+    description: 'How Hotel El Eden handles personal information submitted with a stay request.',
+    eyebrow: 'HOTEL EL EDEN · MEXICO',
+    heading: 'Privacy notice',
+    back: 'Back to Hotel El Eden',
+    lead: 'This notice explains how we use the information you share when requesting a stay.',
+    sections: [
+      {
+        heading: 'Controller and contact',
+        body: `The data controller is ${siteConfig.name}. Address: ${siteConfig.address}. Phone: ${siteConfig.phone}. Contact email: ${siteConfig.email}.`,
+      },
+      {
+        heading: 'Information and purpose',
+        body: 'We may receive your name, phone number, email, stay dates, guest count, estimated arrival time and comments. These details are used only to handle, follow up on and confirm your booking request.',
+      },
+      {
+        heading: 'Channels and retention',
+        body: 'When you submit the form, a WhatsApp message is prepared and you must confirm sending it in that app. The hotel receives the request in that chat and retains it only as long as needed to manage the stay and meet applicable obligations.',
+      },
+      {
+        heading: 'Cookies and analytics',
+        body: 'This site does not use analytics, advertising or tracking cookies. It does not record browsing events or share information with analytics providers.',
+      },
+      {
+        heading: 'Your rights',
+        body: `You may request access, correction, deletion or objection by contacting ${siteConfig.email}. Requests will be handled under applicable Mexican law.`,
+      },
+    ],
+  },
+};
