@@ -2,11 +2,17 @@
 import { siteConfig } from '../data/siteConfig';
 import { Menu } from 'lucide-react';
 import { ui } from '../i18n/ui';
-const { lang = 'es' } = Astro.props;
+
+interface Props {
+  lang?: 'es' | 'en';
+  languageHref?: string;
+}
+
+const { lang = 'es', languageHref: alternateHref } = Astro.props;
 const english = lang === 'en';
 const text = english ? ui.en : ui.es;
 const home = english ? '/en/' : '/';
-const languageHref = english ? '/' : '/en/';
+const languageHref = alternateHref ?? (english ? '/' : '/en/');
 const roomsAnchor = english ? 'rooms' : 'habitaciones';
 const experienceAnchor = english ? 'experience' : 'experiencia';
 const locationAnchor = english ? 'location' : 'ubicacion';

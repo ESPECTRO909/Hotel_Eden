@@ -7,6 +7,7 @@ import HotelExperience from '../../react/HotelExperience';
 import AreasGallery from '../../components/AreasGallery.astro';
 
 const text = ui.en;
+const site = Astro.site!;
 const hotelSchema = {
   '@context': 'https://schema.org',
   '@type': 'Hotel',
@@ -18,7 +19,7 @@ const hotelSchema = {
   telephone: siteConfig.phone,
   email: siteConfig.email,
   priceRange,
-  image: rooms.flatMap((room) => room.images.map((image) => image.src)),
+  image: rooms.flatMap((room) => room.images.map((image) => new URL(image.src, site).toString())),
 };
 const faqSchema = {
   '@context': 'https://schema.org',

@@ -16,6 +16,7 @@ export const getStaticPaths: GetStaticPaths = () => {
 
 const { room } = Astro.props;
 const text = ui.en;
+const site = Astro.site!;
 const homeUrl = `/en/?reserva=${room.slug}#rooms`;
 const schema = {
   '@context': 'https://schema.org',
@@ -24,7 +25,7 @@ const schema = {
   description: room.description.en,
   occupancy: { '@type': 'QuantitativeValue', maxValue: room.capacity },
   bed: room.beds.en,
-  image: room.images.map((image) => image.src),
+  image: room.images.map((image) => new URL(image.src, site).toString()),
   offers: { '@type': 'Offer', price: room.price, priceCurrency: siteConfig.currency, availability: 'https://schema.org/LimitedAvailability' },
   containedInPlace: { '@type': 'Hotel', name: siteConfig.name },
 };
