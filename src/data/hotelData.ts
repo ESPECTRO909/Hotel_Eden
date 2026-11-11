@@ -137,6 +137,21 @@ export const rooms: Room[] = [
   },
 ];
 
+export type Area = {
+  title: LocalizedText;
+  detail: LocalizedText;
+  alt: LocalizedText;
+  src: string;
+  fallback: string;
+};
+
+export const areas: Area[] = [
+  { title: { es: 'Fachada', en: 'Facade' }, detail: { es: 'Hotel El Eden · La Piedad', en: 'Hotel El Eden · La Piedad' }, src: '/images/areas/fachada.webp', fallback: '/images/hero/La-Piedad-1.jpeg.webp', alt: { es: 'Fachada de Hotel El Eden', en: 'Hotel El Eden facade' } },
+  { title: { es: 'Habitaciones', en: 'Guest rooms' }, detail: { es: 'Espacios para descansar', en: 'Spaces to rest' }, src: '/images/areas/habitaciones.webp', fallback: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85', alt: { es: 'Habitación de hotel preparada para huéspedes', en: 'Hotel room prepared for guests' } },
+  { title: { es: 'Patio y jardín', en: 'Patio and garden' }, detail: { es: 'Un respiro al aire libre', en: 'A breath of fresh air' }, src: '/images/areas/patio.webp', fallback: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85', alt: { es: 'Patio de hotel con vegetación', en: 'Hotel patio with greenery' } },
+  { title: { es: 'Áreas comunes', en: 'Shared spaces' }, detail: { es: 'Lugares para compartir', en: 'Places to spend time together' }, src: '/images/areas/areas-comunes.webp', fallback: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=85', alt: { es: 'Área común con sala y mobiliario', en: 'Shared lounge with seating' } },
+];
+
 export const amenities = {
   es: [
     { title: 'Un comienzo lento', copy: 'Desayuno preparado con ingredientes locales, servido sin prisa.', symbol: '01' },
