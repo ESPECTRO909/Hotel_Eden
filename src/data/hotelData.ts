@@ -157,14 +157,14 @@ export const faq = {
     { q: '¿Cómo funciona la solicitud de reserva?', a: 'Elige una habitación y tus fechas. La solicitud se abre en WhatsApp con los datos organizados; el equipo del hotel confirma disponibilidad y precio final.' },
     { q: '¿A qué hora puedo entrar y salir?', a: `El check-in es desde las ${siteConfig.checkIn} y el check-out hasta las ${siteConfig.checkOut}. Si necesitas otro horario, consúltalo al enviar tu solicitud.` },
     { q: '¿El precio mostrado es definitivo?', a: 'Es un estimado por noche en MXN, sin impuestos. El hotel confirma el importe final y la disponibilidad antes de formalizar la reserva.' },
-    { q: '¿Puedo solicitar una habitación para niños?', a: 'La Habitación Cuádruple admite hasta cuatro huéspedes. Indica el número de adultos y niños en el formulario para recibir confirmación.' },
+    { q: '¿Puedo alojarme con niños?', a: 'La Habitación Cuádruple admite hasta cuatro huéspedes. Indica el número de adultos y niños en el formulario para recibir confirmación.' },
     { q: '¿Cómo se gestionan mis datos?', a: 'Los datos se usan para atender tu solicitud y se comparten por WhatsApp. Consulta el aviso de privacidad para conocer el alcance y tus derechos.' },
   ],
   en: [
     { q: 'How does a booking request work?', a: 'Choose a room and your dates. Your request opens in WhatsApp with the details arranged; the hotel team confirms availability and the final price.' },
     { q: 'What are the check-in and check-out times?', a: `Check-in starts at ${siteConfig.checkIn} and check-out is by ${siteConfig.checkOut}. Ask when you send your request if you need a different time.` },
     { q: 'Is the displayed price final?', a: 'It is an estimate per night in MXN, excluding taxes. The hotel confirms the final amount and availability before formalizing your booking.' },
-    { q: 'Can I request a room for children?', a: 'The Quadruple Room accommodates up to four guests. Include the number of adults and children in your form for confirmation.' },
+    { q: 'Can I stay with children?', a: 'The Quadruple Room accommodates up to four guests. Include the number of adults and children in your form for confirmation.' },
     { q: 'How is my information handled?', a: 'Your details are used to handle your request and are shared through WhatsApp. See the privacy notice for the full scope and your rights.' },
   ],
 };

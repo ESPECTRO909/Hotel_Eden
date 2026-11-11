@@ -1,6 +1,6 @@
 # Hotel El Eden
 
-Sitio informativo estático bilingüe (español e inglés) hecho con Astro 7, React y Tailwind CSS. El formulario no reserva automáticamente: prepara una solicitud en WhatsApp, que el huésped debe enviar y el hotel debe confirmar.
+Sitio informativo estático bilingüe (español e inglés) hecho con Astro 7, React 18 y CSS propio. El formulario no reserva automáticamente: prepara una solicitud en WhatsApp, que el huésped debe enviar y el hotel debe confirmar.
 
 ## Desarrollo
 
@@ -25,8 +25,12 @@ La compilación estática se genera en `dist/` y se puede publicar en Netlify, V
 
 ## Estructura
 
-- `src/data/`: catálogo de habitaciones y configuración del hotel.
-- `src/react/HotelExperience.tsx`: tarjetas, galería, diálogo accesible y formulario.
-- `src/utils/`: fechas, disponibilidad, respaldo, analítica y mensaje de WhatsApp.
-- `src/pages/`: portada en español e inglés, páginas de habitación y privacidad.
+- `src/data/`: habitaciones, FAQ, aviso de privacidad y configuración del hotel.
+- `src/i18n/ui.ts`: copys de interfaz en español e inglés.
+- `src/components/`: Navbar y galería de áreas.
+- `src/react/`: tarjetas, diálogos y formulario de solicitud.
+- `src/utils/`: fechas y mensaje de WhatsApp.
+- `src/pages/`: portada, páginas de habitación y privacidad en ambos idiomas.
+- `src/layouts/Layout.astro`: estructura base, metadatos y datos estructurados.
 - `src/styles/global.css`: sistema visual responsive.
+- `public/images/README.md`: nombres y medidas de las fotos del hotel.

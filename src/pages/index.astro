@@ -67,12 +67,11 @@ const faqSchema = {
     <div class="location-copy">
       <p class="eyebrow"><span class="section-number">04</span>{text.locationLabel}</p>
       <h2 class="display-title">{text.locationTitle}</h2>
-      <div class="address-block"><span>{text.addressLabel}</span><p>{siteConfig.address || text.mapNote}</p></div>
-      {siteConfig.directionsUrl && <a class="button button-directions" href={siteConfig.directionsUrl} target="_blank" rel="noreferrer">{text.directions}<span aria-hidden="true">↗</span></a>}
-      {!siteConfig.directionsUrl && <p class="setup-note">{text.mapNote}</p>}
+      <div class="address-block"><span>{text.addressLabel}</span><p>{siteConfig.address}</p></div>
+      <a class="button button-directions" href={siteConfig.directionsUrl} target="_blank" rel="noreferrer">{text.directions}<span aria-hidden="true">↗</span></a>
     </div>
     <div class="location-visual">
-      {siteConfig.mapEmbedUrl ? <iframe src={siteConfig.mapEmbedUrl} title="Mapa de ubicación del Hotel El Eden" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> : <div class="map-placeholder"><span class="map-grid"></span><span class="map-pin"><span></span></span><span class="map-tag">HOTEL EL EDEN · MÉXICO</span><span class="map-coordinates">{siteConfig.locationShort.toUpperCase()}</span></div>}
+      <iframe src={siteConfig.mapEmbedUrl} title="Mapa de ubicación del Hotel El Eden" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </section>
 
