@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { rooms, type Room } from '../../data/hotelData';
 import { siteConfig } from '../../data/siteConfig';
+import { ui } from '../../i18n/ui';
 import type { GetStaticPaths } from 'astro';
 import AmenityList from '../../react/AmenityList';
 
@@ -14,6 +15,7 @@ export const getStaticPaths: GetStaticPaths = () => {
 }
 
 const { room } = Astro.props;
+const text = ui.es;
 const homeUrl = `/?reserva=${room.slug}#habitaciones`;
 const schema = {
   '@context': 'https://schema.org',
@@ -28,12 +30,12 @@ const schema = {
 };
 ---
 
-<Layout title={`${room.name.es} | Hotel El Eden`} description={room.description.es} image={room.images[0].src} structuredData={schema} alternatePath={`/en/rooms/${room.slug}/`}>
+<Layout title={`${room.name.es} | ${siteConfig.name}`} description={room.description.es} image={room.images[0].src} structuredData={schema} alternatePath={`/en/rooms/${room.slug}/`}>
   <article class="room-page">
-    <div class="room-page-top"><a class="back-link" href="/#habitaciones">← Todas las habitaciones</a><span class="eyebrow">{room.eyebrow.es}</span></div>
-    <div class="room-page-heading"><div><h1>{room.name.es}</h1><p>{room.description.es}</p></div><div class="room-page-price"><span>DESDE</span><strong>${room.price.toLocaleString('es-MX')}</strong><small>MXN · por noche</small></div></div>
+    <div class="room-page-top"><a class="back-link" href="/#habitaciones">← {text.roomBack}</a><span class="eyebrow">{room.eyebrow.es}</span></div>
+    <div class="room-page-heading"><div><h1>{room.name.es}</h1><p>{room.description.es}</p></div><div class="room-page-price"><span>{text.roomPriceLabel}</span><strong>${room.price.toLocaleString('es-MX')}</strong><small>{siteConfig.currency} · {text.perNight}</small></div></div>
     <div class="room-gallery"><img src={room.images[0].src} data-fallback={room.images[0].fallback} alt={room.images[0].alt.es} /><div>{room.images.slice(1).map((image) => <img src={image.src} data-fallback={image.fallback} alt={image.alt.es} loading="lazy" />)}</div></div>
-    <div class="room-page-info"><div><p class="eyebrow">EL ESPACIO</p><h2>Un lugar para hacer pausa.</h2><p>{room.description.es}</p><div class="room-facts"><span>{room.size} m²</span><span>{room.beds.es}</span><span>Hasta {room.capacity} huéspedes</span></div></div><div><p class="eyebrow">INCLUYE</p><AmenityList items={room.amenities.map((amenity) => amenity.es)} /><p class="eyebrow policy-heading">POLÍTICAS</p><ul class="room-policy-list">{room.policies.map((policy) => <li>{policy.es}</li>)}</ul></div></div>
-    <div class="room-page-book"><div><strong>Desde ${room.price.toLocaleString('es-MX')} MXN</strong><span>por noche · total estimado en la solicitud</span></div><a class="button button-dark" href={homeUrl}>Consultar esta habitación <span aria-hidden="true">↗</span></a></div>
+    <div class="room-page-info"><div><p class="eyebrow">{text.roomSpaceLabel}</p><h2>{text.roomSpaceTitle}</h2><p>{room.description.es}</p><div class="room-facts"><span>{room.beds.es}</span><span>{text.upTo} {room.capacity} {text.guests}</span></div></div><div><p class="eyebrow">{text.roomIncludes}</p><AmenityList items={room.amenities.map((amenity) => amenity.es)} /><p class="eyebrow policy-heading">{text.roomPolicies}</p><ul class="room-policy-list">{room.policies.map((policy) => <li>{policy.es}</li>)}</ul></div></div>
+    <div class="room-page-book"><div><strong>{text.roomBookFrom} ${room.price.toLocaleString('es-MX')} {siteConfig.currency}</strong><span>{text.roomBookNote}</span></div><a class="button button-dark" href={homeUrl}>{text.roomEnquire} <span aria-hidden="true">↗</span></a></div>
   </article>
 </Layout>

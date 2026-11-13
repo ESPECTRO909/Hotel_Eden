@@ -9,24 +9,21 @@ Usa formato `.webp` o `.jpg`. Si usas `.jpg`, actualiza la extensión `.webp` en
 - `hero/portada.webp`: imagen principal horizontal, ideal 2200 × 1400 px o mayor.
 - `hero/cierre.webp`: imagen horizontal para la sección final, ideal 2200 × 1200 px.
 
-## Amenidades
-
-- `amenities/patio.webp`: patio, jardín o piscina, ideal 1400 × 1500 px.
-
 ## Galería de áreas
 
 - `areas/fachada.webp`: fachada del hotel. Si falta, la galería usa la foto de portada.
 - `areas/habitaciones.webp`: vista general de las habitaciones.
-- `areas/patio.webp`: patio o jardín.
-- `areas/areas-comunes.webp`: recepción, sala o área común.
+- `areas/estacionamiento.webp`: estacionamiento del hotel (15 cajones).
+- `areas/lobby.webp`: lobby y recepción.
 
 ## Habitaciones
 
 Cada carpeta necesita tres imágenes. La primera es la portada de la tarjeta y la galería comienza por ella.
 
-- `rooms/suite-jardin/01.webp`, `02.webp`, `03.webp`
-- `rooms/habitacion-terra/01.webp`, `02.webp`, `03.webp`
-- `rooms/suite-familiar/01.webp`, `02.webp`, `03.webp`
+- `rooms/sencilla/01.webp`, `02.webp`, `03.webp`
+- `rooms/doble/01.webp`, `02.webp`, `03.webp`
+- `rooms/triple/01.webp`, `02.webp`, `03.webp`
+- `rooms/cuadruple/01.webp`, `02.webp`, `03.webp`
 
 Para mejores resultados usa fotos horizontales de al menos 1400 × 1000 px, bien iluminadas y optimizadas para web. Evita subir archivos originales pesados directamente desde la cámara.
 

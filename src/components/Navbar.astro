@@ -1,8 +1,10 @@
 ---
 import { siteConfig } from '../data/siteConfig';
 import { Menu } from 'lucide-react';
+import { ui } from '../i18n/ui';
 const { lang = 'es' } = Astro.props;
 const english = lang === 'en';
+const text = english ? ui.en : ui.es;
 const home = english ? '/en/' : '/';
 const languageHref = english ? '/' : '/en/';
 const roomsAnchor = english ? 'rooms' : 'habitaciones';
@@ -16,16 +18,16 @@ const locationAnchor = english ? 'location' : 'ubicacion';
     <span class="brand-name">Hotel El Eden</span>
   </a>
   <div class="nav-links">
-    <a href={`${home}#${roomsAnchor}`}>{english ? 'Rooms' : 'Habitaciones'}</a>
-    <a href={`${home}#${experienceAnchor}`}>{english ? 'The experience' : 'La experiencia'}</a>
-    <a href={`${home}#${locationAnchor}`}>{english ? 'Location' : 'Ubicación'}</a>
+    <a href={`${home}#${roomsAnchor}`}>{text.navRooms}</a>
+    <a href={`${home}#${experienceAnchor}`}>{text.navExperience}</a>
+    <a href={`${home}#${locationAnchor}`}>{text.navLocation}</a>
   </div>
   <details class="mobile-nav">
     <summary aria-label={english ? 'Open navigation menu' : 'Abrir menú de navegación'}><Menu size={19} aria-hidden="true" /></summary>
     <div class="mobile-nav-panel">
-      <a href={`${home}#${roomsAnchor}`}>{english ? 'Rooms' : 'Habitaciones'}</a>
-      <a href={`${home}#${experienceAnchor}`}>{english ? 'The experience' : 'La experiencia'}</a>
-      <a href={`${home}#${locationAnchor}`}>{english ? 'Location' : 'Ubicación'}</a>
+      <a href={`${home}#${roomsAnchor}`}>{text.navRooms}</a>
+      <a href={`${home}#${experienceAnchor}`}>{text.navExperience}</a>
+      <a href={`${home}#${locationAnchor}`}>{text.navLocation}</a>
     </div>
   </details>
   <div class="nav-actions">
@@ -35,7 +37,7 @@ const locationAnchor = english ? 'location' : 'ubicacion';
       <span class="lang-option">EN</span>
     </a>
     <a class="nav-cta" href={`${home}#${roomsAnchor}`}>
-      <span class="nav-cta-label">{english ? 'Check dates' : 'Consultar fechas'}</span>
+      <span class="nav-cta-label">{text.navCta}</span>
       <span class="nav-cta-compact">{english ? 'Book' : 'Reservar'}</span>
       <span aria-hidden="true">↗</span>
     </a>
