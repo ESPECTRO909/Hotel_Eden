@@ -31,7 +31,11 @@ const locationAnchor = english ? 'location' : 'ubicacion';
     </div>
   </details>
   <div class="nav-actions">
-    <a class="language-link" href={languageHref}>{english ? 'ES' : 'EN'} <span aria-hidden="true">↗</span></a>
+    <a class="lang-switch" href={languageHref} data-language-switch data-lang={lang} aria-label={english ? 'Cambiar a español' : 'Switch to English'}>
+      <span class="lang-thumb" aria-hidden="true"></span>
+      <span class="lang-option">ES</span>
+      <span class="lang-option">EN</span>
+    </a>
     <a class="nav-cta" href={`${home}#${roomsAnchor}`}>
       <span class="nav-cta-label">{text.navCta}</span>
       <span class="nav-cta-compact">{english ? 'Book' : 'Reservar'}</span>
@@ -39,3 +43,16 @@ const locationAnchor = english ? 'location' : 'ubicacion';
     </a>
   </div>
 </nav>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-language-switch]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const modified = event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0;
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (modified || reduced) return;
+      event.preventDefault();
+      link.classList.add('is-switching');
+      setTimeout(() => { window.location.href = link.href; }, 260);
+    });
+  });
+</script>
