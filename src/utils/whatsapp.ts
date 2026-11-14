@@ -26,7 +26,7 @@ export function buildWhatsAppMessage(room: Room, reservation: Reservation): stri
   return [
     '*SOLICITUD DE RESERVA*',
     `*Habitación:* ${room.name.es}`,
-    `*Precio:* $${room.price.toLocaleString('es-MX')} MXN por noche (más impuestos)`,
+    `*Precio:* $${room.price.toLocaleString('es-MX')} ${siteConfig.currency} por noche (más impuestos)`,
     '',
     '*DATOS DEL HUÉSPED*',
     `Nombre: ${reservation.name}`,
@@ -39,13 +39,13 @@ export function buildWhatsAppMessage(room: Room, reservation: Reservation): stri
     `Noches: ${nights}`,
     `Huéspedes: ${reservation.adults} adultos, ${reservation.children} niños`,
     `Llegada estimada: ${reservation.arrival || 'No indicada'}`,
-    `Total estimado: $${total.toLocaleString('es-MX')} MXN (más impuestos)`,
+    `Total estimado: $${total.toLocaleString('es-MX')} ${siteConfig.currency} (más impuestos)`,
     '',
     `*Comentarios:* ${reservation.comments || 'Ninguno'}`,
     '',
     `_Solicitud enviada desde la web. Sujeta a disponibilidad._`,
     reservation.language === 'en' ? 'Idioma del cliente: EN' : '',
-  ].filter((line, index, list) => line || (index > 0 && list[index - 1] !== '')).join('\n');
+  ].join('\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
 export function buildWhatsAppUrl(message: string): string {

@@ -1,18 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { siteConfig } from '../data/siteConfig';
+import PrivacyPage from '../components/PrivacyPage.astro';
 ---
 
-<Layout title="Aviso de privacidad | Hotel El Eden" description="Información sobre el tratamiento de datos personales en Hotel El Eden." alternatePath="/en/privacy">
-  <article class="privacy-page">
-    <a class="back-link" href="/">← Volver a Hotel El Eden</a>
-    <p class="eyebrow">HOTEL EL EDEN · MÉXICO</p><h1>Aviso de privacidad</h1>
-    <p class="privacy-lead">Este aviso describe cómo se utilizan los datos que compartes al enviar una solicitud de estancia.</p>
-    <section><h2>Responsable y contacto</h2><p>El responsable del tratamiento es {siteConfig.name}. Dirección: {siteConfig.address}. Correo de contacto: {siteConfig.email || 'por confirmar'}.</p></section>
-    <section><h2>Datos y finalidad</h2><p>Podemos recibir tu nombre, teléfono, correo electrónico, fechas de estancia, número de huéspedes, hora estimada de llegada y comentarios. Se utilizan exclusivamente para atender, dar seguimiento y confirmar tu solicitud de reserva.</p></section>
-    <section><h2>Canales y conservación</h2><p>Al enviar el formulario, se prepara un mensaje en WhatsApp y debes confirmar su envío dentro de esa aplicación. Si se configura un servicio de respaldo, la solicitud también podría remitirse a dicho servicio. Los datos se conservarán solo durante el tiempo necesario para gestionar la solicitud y cumplir obligaciones aplicables.</p></section>
-    <section><h2>Analítica</h2><p>El sitio puede registrar eventos de navegación para medir el uso de sus funciones. No hay un proveedor de analítica ni cookies de medición activados en esta versión demo.</p></section>
-    <section><h2>Tus derechos</h2><p>Puedes solicitar acceso, rectificación, cancelación u oposición al tratamiento de tus datos escribiendo a {siteConfig.email || 'el correo de contacto del hotel, por confirmar'}. La solicitud se atenderá conforme a la normativa aplicable en México.</p></section>
-    <p class="privacy-disclaimer">El hotel debe completar los datos de contacto y validar este aviso con asesoría legal antes de publicar.</p>
-  </article>
-</Layout>
+<PrivacyPage lang="es" />

@@ -1,10 +1,7 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
+import RoomPage from '../../../components/RoomPage.astro';
 import { rooms, type Room } from '../../../data/hotelData';
-import { siteConfig } from '../../../data/siteConfig';
-import { ui } from '../../../i18n/ui';
 import type { GetStaticPaths } from 'astro';
-import AmenityList from '../../../react/AmenityList';
 
 interface Props {
   room: Room;
@@ -15,27 +12,6 @@ export const getStaticPaths: GetStaticPaths = () => {
 }
 
 const { room } = Astro.props;
-const text = ui.en;
-const homeUrl = `/en/?reserva=${room.slug}#rooms`;
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'HotelRoom',
-  name: room.name.en,
-  description: room.description.en,
-  occupancy: { '@type': 'QuantitativeValue', maxValue: room.capacity },
-  bed: room.beds.en,
-  image: room.images.map((image) => image.src),
-  offers: { '@type': 'Offer', price: room.price, priceCurrency: siteConfig.currency, availability: 'https://schema.org/LimitedAvailability' },
-  containedInPlace: { '@type': 'Hotel', name: siteConfig.name },
-};
 ---
 
-<Layout lang="en" title={`${room.name.en} | ${siteConfig.name}`} description={room.description.en} image={room.images[0].src} structuredData={schema} alternatePath={`/habitaciones/${room.slug}/`}>
-  <article class="room-page">
-    <div class="room-page-top"><a class="back-link" href="/en/#rooms">← {text.roomBack}</a><span class="eyebrow">{room.eyebrow.en}</span></div>
-    <div class="room-page-heading"><div><h1>{room.name.en}</h1><p>{room.description.en}</p></div><div class="room-page-price"><span>{text.roomPriceLabel}</span><strong>${room.price.toLocaleString('en-US')}</strong><small>{siteConfig.currency} · {text.perNight}</small></div></div>
-    <div class="room-gallery"><img src={room.images[0].src} data-fallback={room.images[0].fallback} alt={room.images[0].alt.en} /><div>{room.images.slice(1).map((image) => <img src={image.src} data-fallback={image.fallback} alt={image.alt.en} loading="lazy" />)}</div></div>
-    <div class="room-page-info"><div><p class="eyebrow">{text.roomSpaceLabel}</p><h2>{text.roomSpaceTitle}</h2><p>{room.description.en}</p><div class="room-facts"><span>{room.beds.en}</span><span>{text.upTo} {room.capacity} {text.guests}</span></div></div><div><p class="eyebrow">{text.roomIncludes}</p><AmenityList items={room.amenities.map((amenity) => amenity.en)} /><p class="eyebrow policy-heading">{text.roomPolicies}</p><ul class="room-policy-list">{room.policies.map((policy) => <li>{policy.en}</li>)}</ul></div></div>
-    <div class="room-page-book"><div><strong>{text.roomBookFrom} ${room.price.toLocaleString('en-US')} {siteConfig.currency}</strong><span>{text.roomBookNote}</span></div><a class="button button-dark" href={homeUrl}>{text.roomEnquire} <span aria-hidden="true">↗</span></a></div>
-  </article>
-</Layout>
+<RoomPage room={room} lang="en" />

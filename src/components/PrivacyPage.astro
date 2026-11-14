@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { privacy } from '../data/hotelData';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const content = privacy[lang];
+const home = lang === 'es' ? '/' : '/en/';
+const alternatePath = lang === 'es' ? '/en/privacy' : '/privacidad';
+---
+
+<Layout lang={lang} title={content.title} description={content.description} alternatePath={alternatePath}>
+  <article class="privacy-page">
+    <a class="back-link" href={home}>← {content.back}</a>
+    <p class="eyebrow">{content.eyebrow}</p><h1>{content.heading}</h1>
+    <p class="privacy-lead">{content.lead}</p>
+    {content.sections.map((section) => (
+      <section><h2>{section.heading}</h2><p>{section.body}</p></section>
+    ))}
+  </article>
+</Layout>
